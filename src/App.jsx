@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import {
   FaArrowRight,
   FaBolt,
+  FaCheck,
+  FaCode,
   FaCrown,
   FaDiscord,
   FaEnvelope,
+  FaFire,
   FaInstagram,
+  FaLaptopCode,
   FaPaperPlane,
   FaRocket,
   FaShieldAlt,
@@ -16,10 +20,17 @@ import logo from "./assets/logo.png";
 import founder from "./assets/founder.jpg";
 import "./index.css";
 
+const BACKEND_URL = "https://samurai-websites.onrender.com/register";
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [cursor, setCursor] = useState({ x: 0, y: 0 });
+
+  const { scrollYProgress } = useScroll();
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -280]);
+  const glowScale = useTransform(scrollYProgress, [0, 0.45], [1, 1.35]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -29,9 +40,32 @@ export default function App() {
     message: "",
   });
 
+  const sparks = useMemo(
+    () =>
+      Array.from({ length: 38 }, (_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        delay: Math.random() * 4,
+        duration: 3 + Math.random() * 5,
+        size: 2 + Math.random() * 5,
+      })),
+    []
+  );
+
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 1800);
-    return () => clearTimeout(timer);
+
+    const move = (e) => {
+      setCursor({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", move);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("mousemove", move);
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -47,7 +81,7 @@ export default function App() {
     setSent(false);
 
     try {
-      const res = await fetch("https://samurai-websites.onrender.com/register", {
+      const res = await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +103,7 @@ export default function App() {
 
         setTimeout(() => setSent(false), 3500);
       } else {
-        alert("Registration failed");
+        alert("Message failed. Try again.");
       }
     } catch (error) {
       console.error("Backend error:", error);
@@ -80,10 +114,11 @@ export default function App() {
   };
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 45 },
+    hidden: { opacity: 0, y: 60, filter: "blur(10px)" },
     visible: {
       opacity: 1,
       y: 0,
+      filter: "blur(0px)",
       transition: { duration: 0.85, ease: "easeOut" },
     },
   };
@@ -92,7 +127,7 @@ export default function App() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.14,
+        staggerChildren: 0.12,
       },
     },
   };
@@ -104,13 +139,26 @@ export default function App() {
           <motion.div
             className="fixed inset-0 z-[999] flex items-center justify-center bg-black"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
+            exit={{ opacity: 0, scale: 1.1, filter: "blur(16px)" }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.35),transparent_35%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.42),transparent_34%)]" />
 
             <motion.div
-              initial={{ scale: 0.75, opacity: 0, rotate: -8 }}
+              className="absolute inset-0 opacity-30"
+              animate={{
+                backgroundPosition: ["0px 0px", "120px 120px"],
+              }}
+              transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)",
+                backgroundSize: "60px 60px",
+              }}
+            />
+
+            <motion.div
+              initial={{ scale: 0.65, opacity: 0, rotate: -12 }}
               animate={{ scale: 1, opacity: 1, rotate: 0 }}
               transition={{ duration: 0.9, ease: "easeOut" }}
               className="relative text-center"
@@ -118,10 +166,11 @@ export default function App() {
               <motion.img
                 src={logo}
                 alt="Samurai Logo"
-                className="w-28 h-28 object-contain mx-auto mb-8 drop-shadow-[0_0_35px_rgba(239,68,68,0.8)]"
+                className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_45px_rgba(239,68,68,1)]"
                 animate={{
-                  y: [0, -14, 0],
-                  rotate: [0, 3, -3, 0],
+                  y: [0, -16, 0],
+                  rotate: [0, 4, -4, 0],
+                  scale: [1, 1.08, 1],
                 }}
                 transition={{
                   duration: 2,
@@ -132,7 +181,7 @@ export default function App() {
 
               <motion.h1
                 className="text-4xl md:text-7xl font-black tracking-[0.35em] text-red-500"
-                initial={{ opacity: 0, letterSpacing: "0.1em" }}
+                initial={{ opacity: 0, letterSpacing: "0.05em" }}
                 animate={{ opacity: 1, letterSpacing: "0.35em" }}
                 transition={{ duration: 1 }}
               >
@@ -140,14 +189,14 @@ export default function App() {
               </motion.h1>
 
               <motion.div
-                className="mt-6 h-1 w-72 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full"
+                className="mt-6 h-1 w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full shadow-[0_0_30px_rgba(239,68,68,1)]"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1.1, delay: 0.4 }}
               />
 
               <motion.p
-                className="mt-5 text-gray-400 tracking-[0.25em] text-sm"
+                className="mt-5 text-gray-300 tracking-[0.28em] text-sm"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
@@ -159,17 +208,67 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      <motion.div
+        className="fixed z-[998] hidden lg:block w-8 h-8 rounded-full pointer-events-none border border-red-500/60 mix-blend-difference"
+        animate={{
+          x: cursor.x - 16,
+          y: cursor.y - 16,
+        }}
+        transition={{ type: "spring", stiffness: 500, damping: 35 }}
+      />
+
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.28),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(185,28,28,0.22),transparent_35%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:70px_70px] opacity-25" />
         <motion.div
-          className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-red-600/20 blur-[120px]"
-          animate={{ scale: [1, 1.25, 1], opacity: [0.45, 0.75, 0.45] }}
+          style={{ scale: glowScale }}
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.34),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.35),transparent_36%)]"
+        />
+
+        <motion.div
+          className="absolute inset-0 opacity-20"
+          animate={{ backgroundPosition: ["0px 0px", "100px 100px"] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+            backgroundSize: "70px 70px",
+          }}
+        />
+
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.88))]" />
+
+        {sparks.map((spark) => (
+          <motion.span
+            key={spark.id}
+            className="absolute rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]"
+            style={{
+              left: spark.left,
+              top: spark.top,
+              width: spark.size,
+              height: spark.size,
+            }}
+            animate={{
+              y: [0, -120, 0],
+              opacity: [0, 1, 0],
+              scale: [0.4, 1.4, 0.4],
+            }}
+            transition={{
+              duration: spark.duration,
+              repeat: Infinity,
+              delay: spark.delay,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        <motion.div
+          className="absolute -top-44 -right-44 w-[620px] h-[620px] rounded-full bg-red-600/24 blur-[140px]"
+          animate={{ scale: [1, 1.28, 1], opacity: [0.35, 0.8, 0.35] }}
           transition={{ duration: 6, repeat: Infinity }}
         />
+
         <motion.div
-          className="absolute bottom-0 -left-40 w-[460px] h-[460px] rounded-full bg-red-900/30 blur-[130px]"
-          animate={{ scale: [1.15, 1, 1.15], opacity: [0.3, 0.6, 0.3] }}
+          className="absolute bottom-0 -left-44 w-[520px] h-[520px] rounded-full bg-red-900/35 blur-[140px]"
+          animate={{ scale: [1.18, 1, 1.18], opacity: [0.3, 0.72, 0.3] }}
           transition={{ duration: 7, repeat: Infinity }}
         />
       </div>
@@ -178,13 +277,15 @@ export default function App() {
         initial={{ y: -90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/55 backdrop-blur-2xl px-5 md:px-7 py-4 flex items-center justify-between shadow-[0_0_40px_rgba(239,68,68,0.18)]"
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/55 backdrop-blur-2xl px-5 md:px-7 py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
       >
         <a href="#" className="flex items-center gap-3">
-          <img
+          <motion.img
             src={logo}
             alt="Samurai Websites Logo"
-            className="w-10 h-10 object-contain drop-shadow-[0_0_18px_rgba(239,68,68,0.8)]"
+            className="w-10 h-10 object-contain drop-shadow-[0_0_18px_rgba(239,68,68,0.9)]"
+            whileHover={{ rotate: 360, scale: 1.18 }}
+            transition={{ duration: 0.7 }}
           />
           <span className="font-black tracking-[0.35em] text-red-500 text-xs md:text-sm">
             SAMURAI
@@ -199,21 +300,30 @@ export default function App() {
               className="hover:text-red-500 transition relative group"
             >
               {item}
-              <span className="absolute left-0 -bottom-2 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-300" />
+              <span className="absolute left-0 -bottom-2 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-300 shadow-[0_0_12px_rgba(239,68,68,1)]" />
             </a>
           ))}
         </div>
 
-        <a
+        <motion.a
           href="#contact"
-          className="hidden sm:flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-sm font-bold hover:bg-red-700 transition shadow-lg shadow-red-600/25"
+          whileHover={{ scale: 1.08, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          className="hidden sm:flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-sm font-black hover:bg-red-700 transition shadow-lg shadow-red-600/30"
         >
           Start <FaArrowRight />
-        </a>
+        </motion.a>
       </motion.nav>
 
       <main className="relative z-10">
         <section className="min-h-screen flex items-center pt-36 px-6">
+          <motion.div
+            style={{ y: heroY }}
+            className="absolute top-28 left-1/2 -translate-x-1/2 text-[18vw] font-black text-white/[0.025] tracking-tighter pointer-events-none whitespace-nowrap"
+          >
+            SAMURAI
+          </motion.div>
+
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
             <motion.div
               variants={stagger}
@@ -223,48 +333,59 @@ export default function App() {
             >
               <motion.div
                 variants={fadeUp}
-                className="inline-flex items-center gap-3 rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-red-400 text-sm font-bold tracking-[0.25em]"
+                className="inline-flex items-center gap-3 rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-red-400 text-sm font-black tracking-[0.24em] shadow-[0_0_25px_rgba(239,68,68,0.18)]"
               >
-                <FaBolt /> FUTURISTIC WEB DESIGN
+                <FaFire /> FUTURISTIC WEB DESIGN
               </motion.div>
 
               <motion.h1
                 variants={fadeUp}
-                className="text-5xl md:text-7xl xl:text-8xl font-black leading-[0.95]"
+                className="text-5xl md:text-7xl xl:text-8xl font-black leading-[0.92]"
               >
-                Build your brand like a{" "}
-                <span className="relative inline-block text-red-500 drop-shadow-[0_0_28px_rgba(239,68,68,0.55)]">
-                  digital empire.
-                  <span className="absolute left-0 -bottom-2 w-full h-2 bg-red-600/30 blur-md" />
-                </span>
+                Websites that make clients{" "}
+                <motion.span
+                  className="relative inline-block text-red-500 drop-shadow-[0_0_34px_rgba(239,68,68,0.7)]"
+                  animate={{
+                    textShadow: [
+                      "0 0 18px rgba(239,68,68,0.5)",
+                      "0 0 38px rgba(239,68,68,1)",
+                      "0 0 18px rgba(239,68,68,0.5)",
+                    ],
+                  }}
+                  transition={{ duration: 2.2, repeat: Infinity }}
+                >
+                  call you first.
+                  <span className="absolute left-0 -bottom-2 w-full h-2 bg-red-600/40 blur-md" />
+                </motion.span>
               </motion.h1>
 
               <motion.p
                 variants={fadeUp}
                 className="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed"
               >
-                Samurai Websites creates premium, cinematic, animated websites
-                with modern UI, sharp branding, and samurai-level precision.
+                Samurai Websites creates cinematic, premium, animated business
+                websites designed to make your brand look expensive, trusted,
+                and impossible to ignore.
               </motion.p>
 
               <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
                 <motion.a
-                  whileHover={{ scale: 1.06, y: -3 }}
+                  whileHover={{ scale: 1.07, y: -4 }}
                   whileTap={{ scale: 0.96 }}
                   href="#contact"
-                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_35px_rgba(239,68,68,0.45)] flex items-center gap-3"
+                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] flex items-center gap-3"
                 >
-                  Start Project
+                  Build My Website
                   <FaRocket className="group-hover:translate-x-1 group-hover:-translate-y-1 transition" />
                 </motion.a>
 
                 <motion.a
-                  whileHover={{ scale: 1.06, y: -3 }}
+                  whileHover={{ scale: 1.07, y: -4 }}
                   whileTap={{ scale: 0.96 }}
                   href="#services"
                   className="px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:border-red-500 hover:bg-red-500/10 transition font-bold"
                 >
-                  View Services
+                  See The Power
                 </motion.a>
               </motion.div>
 
@@ -273,21 +394,22 @@ export default function App() {
                 className="grid grid-cols-3 gap-4 max-w-xl pt-6"
               >
                 {[
-                  ["10x", "Premium Feel"],
-                  ["24/7", "Online Brand"],
-                  ["100%", "Custom UI"],
+                  ["Premium", "Brand Feel"],
+                  ["Fast", "Modern Build"],
+                  ["Lead", "Focused Design"],
                 ].map(([num, label]) => (
-                  <div
+                  <motion.div
                     key={label}
-                    className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-xl"
+                    whileHover={{ y: -8, scale: 1.04 }}
+                    className="rounded-3xl border border-white/10 bg-white/[0.045] p-5 backdrop-blur-xl hover:border-red-500/50 transition"
                   >
-                    <p className="text-2xl md:text-3xl font-black text-red-500">
+                    <p className="text-xl md:text-3xl font-black text-red-500">
                       {num}
                     </p>
                     <p className="text-gray-500 text-xs md:text-sm mt-1">
                       {label}
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </motion.div>
             </motion.div>
@@ -299,17 +421,21 @@ export default function App() {
               className="relative"
             >
               <motion.div
-                className="absolute -inset-8 bg-red-600/25 blur-3xl rounded-full"
-                animate={{ scale: [1, 1.13, 1], opacity: [0.45, 0.75, 0.45] }}
+                className="absolute -inset-10 bg-red-600/25 blur-3xl rounded-full"
+                animate={{ scale: [1, 1.16, 1], opacity: [0.45, 0.85, 0.45] }}
                 transition={{ duration: 4, repeat: Infinity }}
               />
 
               <motion.div
                 animate={{ y: [0, -18, 0] }}
                 transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-                className="relative rounded-[2.5rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl p-5 shadow-[0_0_70px_rgba(239,68,68,0.25)]"
+                className="relative rounded-[2.5rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl p-5 shadow-[0_0_85px_rgba(239,68,68,0.28)] overflow-hidden"
               >
-                <div className="absolute top-5 left-5 right-5 h-16 bg-gradient-to-b from-white/15 to-transparent rounded-t-[2rem] pointer-events-none" />
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  animate={{ x: ["-140%", "140%"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2 }}
+                />
 
                 <img
                   src={founder}
@@ -321,7 +447,7 @@ export default function App() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 2.5, duration: 0.8 }}
-                  className="absolute bottom-10 left-10 right-10 rounded-3xl bg-black/75 backdrop-blur-2xl border border-white/10 p-6 shadow-2xl"
+                  className="absolute bottom-10 left-10 right-10 rounded-3xl bg-black/78 backdrop-blur-2xl border border-white/10 p-6 shadow-2xl"
                 >
                   <p className="text-red-500 font-black tracking-[0.25em] text-xs">
                     FOUNDER & CEO
@@ -330,8 +456,8 @@ export default function App() {
                     Mithun Krrishnan D
                   </h2>
                   <p className="text-gray-400 text-sm mt-3 leading-relaxed">
-                    Founder of Samurai Websites, crafting premium digital
-                    experiences with cinematic animations and samurai precision.
+                    Building premium digital experiences with cinematic
+                    animations, clean code, and samurai-level precision.
                   </p>
                 </motion.div>
               </motion.div>
@@ -345,7 +471,7 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
-            className="max-w-6xl mx-auto rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-8 md:p-14 relative overflow-hidden"
+            className="max-w-6xl mx-auto rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-8 md:p-14 relative overflow-hidden shadow-[0_0_70px_rgba(239,68,68,0.12)]"
           >
             <div className="absolute -right-32 -top-32 w-80 h-80 bg-red-600/20 rounded-full blur-3xl" />
 
@@ -354,14 +480,13 @@ export default function App() {
             </p>
 
             <h2 className="text-4xl md:text-6xl font-black mt-4">
-              Samurai Websites
+              Not just a website. A first impression weapon.
             </h2>
 
             <p className="text-gray-400 mt-6 text-lg md:text-xl leading-relaxed max-w-4xl">
-              Mithun Krrishnan D is the Founder & CEO of Samurai Websites, a
-              futuristic web design brand focused on crafting premium digital
-              experiences with modern UI, cinematic animations, and samurai
-              precision.
+              Samurai Websites helps businesses look premium online with bold
+              visuals, cinematic motion, smooth sections, and forms that turn
+              visitors into real client conversations.
             </p>
 
             <div className="grid md:grid-cols-3 gap-5 mt-10">
@@ -369,25 +494,27 @@ export default function App() {
                 {
                   icon: <FaCrown />,
                   title: "Premium Look",
-                  text: "Luxury layouts that make brands feel expensive.",
+                  text: "Luxury layouts that instantly make brands feel more valuable.",
                 },
                 {
                   icon: <FaBolt />,
                   title: "Insane Motion",
-                  text: "Smooth cinematic animations and hover effects.",
+                  text: "Smooth animations that make the website feel alive.",
                 },
                 {
                   icon: <FaShieldAlt />,
-                  title: "Sharp Precision",
-                  text: "Clean sections, strong spacing, and serious polish.",
+                  title: "Trust Builder",
+                  text: "Clean design that makes clients feel confident to contact you.",
                 },
               ].map((card) => (
                 <motion.div
                   key={card.title}
-                  whileHover={{ y: -10, scale: 1.03 }}
-                  className="rounded-3xl border border-white/10 bg-black/35 p-6 hover:border-red-500/50 transition"
+                  whileHover={{ y: -12, scale: 1.035 }}
+                  className="rounded-3xl border border-white/10 bg-black/35 p-6 hover:border-red-500/50 transition group"
                 >
-                  <div className="text-red-500 text-3xl mb-5">{card.icon}</div>
+                  <div className="text-red-500 text-3xl mb-5 group-hover:scale-125 transition">
+                    {card.icon}
+                  </div>
                   <h3 className="text-xl font-black">{card.title}</h3>
                   <p className="text-gray-500 mt-3 leading-relaxed">
                     {card.text}
@@ -401,17 +528,18 @@ export default function App() {
         <section id="founder" className="px-6 py-24">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -70, rotate: -3 }}
+              whileInView={{ opacity: 1, x: 0, rotate: 0 }}
               viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.85 }}
               className="relative"
             >
               <div className="absolute -inset-4 bg-red-600/20 blur-3xl rounded-full" />
-              <img
+              <motion.img
+                whileHover={{ scale: 1.025, rotate: 1 }}
                 src={founder}
                 alt="Founder"
-                className="relative w-full h-[520px] object-cover rounded-[2.5rem] border border-red-500/30 shadow-[0_0_70px_rgba(239,68,68,0.18)]"
+                className="relative w-full h-[520px] object-cover rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)]"
               />
             </motion.div>
 
@@ -441,7 +569,8 @@ export default function App() {
                 className="text-gray-400 text-lg leading-relaxed"
               >
                 Founder & CEO of Samurai Websites. Building futuristic websites
-                for brands that want to look premium, powerful, and unforgettable.
+                for brands that want to look premium, powerful, and
+                unforgettable.
               </motion.p>
 
               <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
@@ -456,6 +585,16 @@ export default function App() {
                   )
                 )}
               </motion.div>
+
+              <motion.a
+                variants={fadeUp}
+                href="#contact"
+                whileHover={{ scale: 1.06, y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-3 rounded-full bg-red-600 px-7 py-4 font-black shadow-[0_0_40px_rgba(239,68,68,0.45)]"
+              >
+                Work With Me <FaArrowRight />
+              </motion.a>
             </motion.div>
           </div>
         </section>
@@ -473,14 +612,14 @@ export default function App() {
               </p>
 
               <h2 className="text-4xl md:text-6xl font-black mt-4 mb-12">
-                What we build
+                What your clients will see
               </h2>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
-                  icon: <FaRocket />,
+                  icon: <FaLaptopCode />,
                   title: "Premium Websites",
                   text: "Modern landing pages, portfolios, business sites, and high-end brand pages.",
                 },
@@ -490,29 +629,33 @@ export default function App() {
                   text: "Smooth animations, futuristic layouts, luxury visuals, and clean user experience.",
                 },
                 {
-                  icon: <FaCrown />,
-                  title: "Business Growth",
-                  text: "Websites built to impress clients, collect leads, and make your brand look serious.",
+                  icon: <FaCode />,
+                  title: "Lead Forms",
+                  text: "Contact forms connected to backend email so every client message reaches you.",
                 },
               ].map((service, index) => (
                 <motion.div
                   key={service.title}
-                  initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 60, scale: 0.92 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, amount: 0.25 }}
                   transition={{ delay: index * 0.12, duration: 0.7 }}
                   whileHover={{
-                    y: -14,
-                    scale: 1.035,
+                    y: -16,
+                    scale: 1.04,
                     rotate: index === 1 ? 0 : index === 0 ? -1 : 1,
                   }}
                   className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-8 hover:border-red-500/60 transition duration-300 relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 via-red-600/0 to-red-600/20 opacity-0 group-hover:opacity-100 transition duration-300" />
 
-                  <div className="relative text-4xl mb-6 text-red-500 group-hover:scale-125 transition duration-300">
+                  <motion.div
+                    className="relative text-4xl mb-6 text-red-500"
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.8 }}
+                  >
                     {service.icon}
-                  </div>
+                  </motion.div>
 
                   <h3 className="relative text-2xl font-black">
                     {service.title}
@@ -527,11 +670,49 @@ export default function App() {
           </div>
         </section>
 
+        <section className="px-6 py-24">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              className="rounded-[2.5rem] border border-red-500/25 bg-red-950/20 p-8 md:p-14 backdrop-blur-xl relative overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
+                animate={{ x: ["-120%", "120%"] }}
+                transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+              />
+
+              <div className="relative grid md:grid-cols-4 gap-6">
+                {[
+                  "Looks premium",
+                  "Loads clean",
+                  "Mobile responsive",
+                  "Gets real leads",
+                ].map((item) => (
+                  <motion.div
+                    key={item}
+                    whileHover={{ scale: 1.05, y: -6 }}
+                    className="rounded-3xl bg-black/35 border border-white/10 p-6 flex items-center gap-4"
+                  >
+                    <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_24px_rgba(239,68,68,0.8)]">
+                      <FaCheck />
+                    </span>
+                    <p className="font-black">{item}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         <section id="contact" className="px-6 py-24">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-stretch">
             <motion.form
               onSubmit={handleSubmit}
-              initial={{ opacity: 0, x: -60 }}
+              initial={{ opacity: 0, x: -70 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
@@ -544,7 +725,7 @@ export default function App() {
               </p>
 
               <h2 className="relative text-4xl md:text-5xl font-black mt-4 mb-8">
-                Start your project
+                Ready to look premium?
               </h2>
 
               <div className="relative space-y-4">
@@ -594,11 +775,11 @@ export default function App() {
                 />
 
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.035 }}
                   whileTap={{ scale: 0.96 }}
                   type="submit"
                   disabled={sending}
-                  className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black shadow-[0_0_35px_rgba(239,68,68,0.45)] disabled:opacity-60 flex items-center justify-center gap-3"
+                  className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] disabled:opacity-60 flex items-center justify-center gap-3"
                 >
                   {sending ? (
                     <>
@@ -642,7 +823,7 @@ export default function App() {
             </motion.form>
 
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
+              initial={{ opacity: 0, x: 70 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
@@ -660,9 +841,8 @@ export default function App() {
                 </h2>
 
                 <p className="text-gray-400 mt-5 leading-relaxed text-lg">
-                  Dark luxury websites, animated interfaces, futuristic digital
-                  experiences, and premium branding that makes people stop
-                  scrolling.
+                  A premium website is not just design. It is trust, attention,
+                  and a reason for customers to contact you before someone else.
                 </p>
 
                 <div className="flex gap-5 text-3xl mt-8 text-red-500">
@@ -680,8 +860,8 @@ export default function App() {
                 <div className="mt-10 space-y-4">
                   {[
                     "Premium animated website design",
-                    "Founder/brand portfolio sections",
-                    "Lead form connected to backend",
+                    "Founder and business portfolio sections",
+                    "Lead form connected to email backend",
                     "Modern responsive layout",
                   ].map((item) => (
                     <div
