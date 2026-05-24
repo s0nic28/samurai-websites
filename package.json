@@ -1,17 +1,19 @@
 {
-  "name": "samurai-websites-server",
+  "name": "samurai-websites",
   "version": "1.0.0",
-  "description": "Samurai Websites Backend",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js"
+    "start": "node server/index.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "Mithun Krrishnan D",
-  "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2"
-  }
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {}
 }
