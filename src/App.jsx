@@ -29,8 +29,8 @@ export default function App() {
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -280]);
-  const glowScale = useTransform(scrollYProgress, [0, 0.45], [1, 1.35]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -260]);
+  const glowScale = useTransform(scrollYProgress, [0, 0.45], [1, 1.28]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -42,13 +42,13 @@ export default function App() {
 
   const sparks = useMemo(
     () =>
-      Array.from({ length: 70 }, (_, i) => ({
+      Array.from({ length: 48 }, (_, i) => ({
         id: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
         delay: Math.random() * 4,
-        duration: 2.5 + Math.random() * 5,
-        size: 2 + Math.random() * 5,
+        duration: 3 + Math.random() * 5,
+        size: 2 + Math.random() * 4,
       })),
     []
   );
@@ -65,11 +65,11 @@ export default function App() {
 
   const slashLines = useMemo(
     () =>
-      Array.from({ length: 16 }, (_, i) => ({
+      Array.from({ length: 14 }, (_, i) => ({
         id: i,
-        top: `${6 + i * 6}%`,
-        delay: i * 0.16,
-        width: 100 + Math.random() * 200,
+        top: `${8 + i * 6}%`,
+        delay: i * 0.18,
+        width: 100 + Math.random() * 210,
       })),
     []
   );
@@ -77,7 +77,7 @@ export default function App() {
   const floatingWords = ["PREMIUM", "CINEMATIC", "SAMURAI", "MODERN", "BRAND"];
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1600);
+    const timer = setTimeout(() => setLoaded(true), 1400);
 
     const move = (e) => {
       setCursor({ x: e.clientX, y: e.clientY });
@@ -137,12 +137,12 @@ export default function App() {
   };
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 55, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 45, filter: "blur(8px)" },
     visible: {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.8, ease: "easeOut" },
+      transition: { duration: 0.75, ease: "easeOut" },
     },
   };
 
@@ -150,7 +150,7 @@ export default function App() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.11,
+        staggerChildren: 0.1,
       },
     },
   };
@@ -162,15 +162,15 @@ export default function App() {
           <motion.div
             className="fixed inset-0 z-[999] flex items-center justify-center bg-black px-4"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.1, filter: "blur(16px)" }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            exit={{ opacity: 0, scale: 1.08, filter: "blur(16px)" }}
+            transition={{ duration: 0.75, ease: "easeInOut" }}
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.42),transparent_34%)]" />
 
             <motion.div
-              className="absolute inset-0 opacity-30"
+              className="absolute inset-0 opacity-25"
               animate={{ backgroundPosition: ["0px 0px", "120px 120px"] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               style={{
                 backgroundImage:
                   "linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)",
@@ -189,7 +189,7 @@ export default function App() {
                 alt="Samurai Logo"
                 className="w-24 h-24 sm:w-32 sm:h-32 object-contain mx-auto mb-6 sm:mb-8 drop-shadow-[0_0_45px_rgba(239,68,68,1)]"
                 animate={{
-                  y: [0, -16, 0],
+                  y: [0, -14, 0],
                   rotate: [0, 4, -4, 0],
                   scale: [1, 1.08, 1],
                 }}
@@ -202,7 +202,7 @@ export default function App() {
 
               <motion.h1
                 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-[0.18em] sm:tracking-[0.35em] text-red-500"
-                initial={{ opacity: 0, letterSpacing: "0.05em" }}
+                initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
               >
@@ -241,13 +241,13 @@ export default function App() {
       <div className="fixed inset-0 pointer-events-none">
         <motion.div
           style={{ scale: glowScale }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.34),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.35),transparent_36%)]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.32),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.34),transparent_36%)]"
         />
 
         <motion.div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-15 sm:opacity-20"
           animate={{ backgroundPosition: ["0px 0px", "100px 100px"] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
           style={{
             backgroundImage:
               "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
@@ -255,96 +255,98 @@ export default function App() {
           }}
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.88))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.9))]" />
 
-        {sparks.map((spark) => (
-          <motion.span
-            key={spark.id}
-            className="absolute rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]"
-            style={{
-              left: spark.left,
-              top: spark.top,
-              width: spark.size,
-              height: spark.size,
-            }}
-            animate={{
-              y: [0, -120, 0],
-              opacity: [0, 1, 0],
-              scale: [0.4, 1.4, 0.4],
-            }}
-            transition={{
-              duration: spark.duration,
-              repeat: Infinity,
-              delay: spark.delay,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        <div className="hidden sm:block">
+          {sparks.map((spark) => (
+            <motion.span
+              key={spark.id}
+              className="absolute rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]"
+              style={{
+                left: spark.left,
+                top: spark.top,
+                width: spark.size,
+                height: spark.size,
+              }}
+              animate={{
+                y: [0, -120, 0],
+                opacity: [0, 1, 0],
+                scale: [0.4, 1.4, 0.4],
+              }}
+              transition={{
+                duration: spark.duration,
+                repeat: Infinity,
+                delay: spark.delay,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
 
-        {slashLines.map((line) => (
-          <motion.div
-            key={line.id}
-            className="absolute h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent rotate-[-18deg]"
-            style={{
-              top: line.top,
-              left: "-30%",
-              width: line.width,
-            }}
-            animate={{
-              x: ["0vw", "160vw"],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 2.4,
-              repeat: Infinity,
-              delay: line.delay,
-              repeatDelay: 3,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+          {slashLines.map((line) => (
+            <motion.div
+              key={line.id}
+              className="absolute h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent rotate-[-18deg]"
+              style={{
+                top: line.top,
+                left: "-30%",
+                width: line.width,
+              }}
+              animate={{
+                x: ["0vw", "160vw"],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                delay: line.delay,
+                repeatDelay: 3,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
 
-        {floatingWords.map((word, index) => (
-          <motion.div
-            key={word}
-            className="absolute hidden sm:block text-white/[0.035] font-black tracking-[0.35em] text-4xl md:text-6xl"
-            style={{
-              top: `${18 + index * 16}%`,
-              left: index % 2 === 0 ? "6%" : "62%",
-            }}
-            animate={{
-              y: [0, -25, 0],
-              opacity: [0.025, 0.08, 0.025],
-              scale: [1, 1.08, 1],
-            }}
-            transition={{
-              duration: 5 + index,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            {word}
-          </motion.div>
-        ))}
+          {floatingWords.map((word, index) => (
+            <motion.div
+              key={word}
+              className="absolute text-white/[0.035] font-black tracking-[0.35em] text-4xl md:text-6xl"
+              style={{
+                top: `${18 + index * 16}%`,
+                left: index % 2 === 0 ? "6%" : "62%",
+              }}
+              animate={{
+                y: [0, -25, 0],
+                opacity: [0.025, 0.08, 0.025],
+                scale: [1, 1.08, 1],
+              }}
+              transition={{
+                duration: 5 + index,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              {word}
+            </motion.div>
+          ))}
+        </div>
 
         <motion.div
-          className="absolute -top-44 -right-44 w-[620px] h-[620px] rounded-full bg-red-600/24 blur-[140px]"
-          animate={{ scale: [1, 1.28, 1], opacity: [0.35, 0.8, 0.35] }}
-          transition={{ duration: 6, repeat: Infinity }}
+          className="absolute -top-44 -right-44 w-[520px] sm:w-[620px] h-[520px] sm:h-[620px] rounded-full bg-red-600/24 blur-[120px] sm:blur-[140px]"
+          animate={{ scale: [1, 1.22, 1], opacity: [0.35, 0.75, 0.35] }}
+          transition={{ duration: 7, repeat: Infinity }}
         />
 
         <motion.div
-          className="absolute bottom-0 -left-44 w-[520px] h-[520px] rounded-full bg-red-900/35 blur-[140px]"
-          animate={{ scale: [1.18, 1, 1.18], opacity: [0.3, 0.72, 0.3] }}
-          transition={{ duration: 7, repeat: Infinity }}
+          className="absolute bottom-0 -left-44 w-[420px] sm:w-[520px] h-[420px] sm:h-[520px] rounded-full bg-red-900/35 blur-[120px] sm:blur-[140px]"
+          animate={{ scale: [1.15, 1, 1.15], opacity: [0.3, 0.68, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
         />
       </div>
 
       <motion.nav
         initial={{ y: -90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8, ease: "easeOut" }}
-        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/60 backdrop-blur-2xl px-4 sm:px-7 py-3 sm:py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
+        transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
+        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/65 backdrop-blur-2xl px-4 sm:px-7 py-3 sm:py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
       >
         <a href="#" className="flex items-center gap-2 sm:gap-3">
           <motion.img
@@ -466,17 +468,21 @@ export default function App() {
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/15 to-transparent"
                   animate={{ x: ["-120%", "120%"] }}
-                  transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.5 }}
+                  transition={{
+                    duration: 2.4,
+                    repeat: Infinity,
+                    repeatDelay: 1.8,
+                  }}
                 />
 
                 <div className="relative flex items-center gap-4">
                   <motion.div
-                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center shadow-[0_0_28px_rgba(239,68,68,0.8)]"
+                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center shadow-[0_0_28px_rgba(239,68,68,0.8)] shrink-0"
                     animate={{
                       rotate: [0, 8, -8, 0],
-                      scale: [1, 1.1, 1],
+                      scale: [1, 1.08, 1],
                     }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    transition={{ duration: 2.2, repeat: Infinity }}
                   >
                     ⚔️
                   </motion.div>
@@ -520,24 +526,24 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0, scale: 0.85, rotate: 4 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 1.9, duration: 1, ease: "easeOut" }}
+              transition={{ delay: 1.7, duration: 1, ease: "easeOut" }}
               className="relative min-h-[420px] sm:min-h-[620px] flex items-center justify-center"
             >
               <motion.div
                 className="absolute -inset-10 bg-red-600/25 blur-3xl rounded-full"
-                animate={{ scale: [1, 1.16, 1], opacity: [0.45, 0.85, 0.45] }}
-                transition={{ duration: 4, repeat: Infinity }}
+                animate={{ scale: [1, 1.14, 1], opacity: [0.45, 0.8, 0.45] }}
+                transition={{ duration: 4.5, repeat: Infinity }}
               />
 
               <motion.div
-                animate={{ y: [0, -14, 0] }}
-                transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                 className="relative w-full max-w-[620px] h-[390px] sm:h-[560px] rounded-[2rem] sm:rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20 pointer-events-none"
                   animate={{ x: ["-140%", "140%"] }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2 }}
+                  transition={{ duration: 2.7, repeat: Infinity, repeatDelay: 2.2 }}
                 />
 
                 <motion.div
@@ -549,54 +555,56 @@ export default function App() {
                       "0 0 25px rgba(239,68,68,0.25)",
                     ],
                   }}
-                  transition={{ duration: 2.8, repeat: Infinity }}
+                  transition={{ duration: 3, repeat: Infinity }}
                 />
 
                 <motion.div
                   className="absolute w-[240px] h-[240px] sm:w-[390px] sm:h-[390px] rounded-full border border-red-500/30"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 />
 
                 <motion.div
                   className="absolute w-[310px] h-[310px] sm:w-[490px] sm:h-[490px] rounded-full border border-white/10"
                   animate={{ rotate: -360 }}
-                  transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                 />
 
-                {orbitDots.map((dot) => (
-                  <motion.div
-                    key={dot.id}
-                    className="absolute w-[280px] h-[280px] sm:w-[430px] sm:h-[430px]"
-                    style={{ rotate: dot.rotate }}
-                    animate={{ rotate: dot.rotate + 360 }}
-                    transition={{
-                      duration: 22,
-                      repeat: Infinity,
-                      ease: "linear",
-                      delay: dot.delay,
-                    }}
-                  >
-                    <span className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]" />
-                  </motion.div>
-                ))}
+                <div className="hidden sm:block">
+                  {orbitDots.map((dot) => (
+                    <motion.div
+                      key={dot.id}
+                      className="absolute w-[430px] h-[430px]"
+                      style={{ rotate: dot.rotate }}
+                      animate={{ rotate: dot.rotate + 360 }}
+                      transition={{
+                        duration: 24,
+                        repeat: Infinity,
+                        ease: "linear",
+                        delay: dot.delay,
+                      }}
+                    >
+                      <span className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]" />
+                    </motion.div>
+                  ))}
+                </div>
 
                 <motion.div
                   className="relative z-30 text-center px-6 sm:px-8"
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 2.2, duration: 0.8 }}
+                  transition={{ delay: 2, duration: 0.8 }}
                 >
                   <motion.img
                     src={logo}
                     alt="Samurai Websites Brand Logo"
                     className="w-20 h-20 sm:w-32 sm:h-32 object-contain mx-auto mb-5 sm:mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
                     animate={{
-                      y: [0, -14, 0],
+                      y: [0, -12, 0],
                       rotate: [0, 3, -3, 0],
                       scale: [1, 1.08, 1],
                     }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    transition={{ duration: 3.2, repeat: Infinity }}
                   />
 
                   <motion.h2
@@ -608,7 +616,7 @@ export default function App() {
                         "0 0 18px rgba(255,255,255,0.15)",
                       ],
                     }}
-                    transition={{ duration: 2.4, repeat: Infinity }}
+                    transition={{ duration: 2.6, repeat: Infinity }}
                   >
                     SAMURAI
                     <span className="block text-red-500">WEBSITES</span>
@@ -622,7 +630,7 @@ export default function App() {
                   <motion.div
                     className="mt-6 sm:mt-8 inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-4 sm:px-6 py-3 text-red-300 font-black tracking-[0.12em] sm:tracking-[0.18em] text-[10px] sm:text-xs"
                     animate={{ scale: [1, 1.04, 1] }}
-                    transition={{ duration: 1.8, repeat: Infinity }}
+                    transition={{ duration: 2, repeat: Infinity }}
                   >
                     <FaBolt /> CRAFTED TO IMPRESS
                   </motion.div>
@@ -640,54 +648,62 @@ export default function App() {
             viewport={{ once: true, amount: 0.25 }}
             className="max-w-6xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-[0_0_70px_rgba(239,68,68,0.12)]"
           >
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
+              animate={{ x: ["-120%", "120%"] }}
+              transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
+            />
+
             <div className="absolute -right-32 -top-32 w-80 h-80 bg-red-600/20 rounded-full blur-3xl" />
 
-            <p className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
-              ABOUT
-            </p>
+            <div className="relative">
+              <p className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
+                ABOUT
+              </p>
 
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black mt-4">
-              Wanna make your website look premium?
-            </h2>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black mt-4">
+                Wanna make your website look premium?
+              </h2>
 
-            <p className="text-gray-400 mt-6 text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl">
-              Samurai Websites helps businesses look premium online with bold
-              visuals, cinematic motion, smooth sections, and forms that turn
-              visitors into real client conversations.
-            </p>
+              <p className="text-gray-400 mt-6 text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl">
+                Samurai Websites helps businesses look premium online with bold
+                visuals, cinematic motion, smooth sections, and forms that turn
+                visitors into real client conversations.
+              </p>
 
-            <div className="grid md:grid-cols-3 gap-5 mt-10">
-              {[
-                {
-                  icon: <FaCrown />,
-                  title: "Premium Look",
-                  text: "Luxury layouts that instantly make brands feel more valuable.",
-                },
-                {
-                  icon: <FaBolt />,
-                  title: "Insane Motion",
-                  text: "Smooth animations that make the website feel alive.",
-                },
-                {
-                  icon: <FaShieldAlt />,
-                  title: "Trust Builder",
-                  text: "Clean design that makes clients feel confident to contact you.",
-                },
-              ].map((card) => (
-                <motion.div
-                  key={card.title}
-                  whileHover={{ y: -12, scale: 1.035 }}
-                  className="rounded-3xl border border-white/10 bg-black/35 p-6 hover:border-red-500/50 transition group"
-                >
-                  <div className="text-red-500 text-3xl mb-5 group-hover:scale-125 transition">
-                    {card.icon}
-                  </div>
-                  <h3 className="text-xl font-black">{card.title}</h3>
-                  <p className="text-gray-500 mt-3 leading-relaxed">
-                    {card.text}
-                  </p>
-                </motion.div>
-              ))}
+              <div className="grid md:grid-cols-3 gap-5 mt-10">
+                {[
+                  {
+                    icon: <FaCrown />,
+                    title: "Premium Look",
+                    text: "Luxury layouts that instantly make brands feel more valuable.",
+                  },
+                  {
+                    icon: <FaBolt />,
+                    title: "Insane Motion",
+                    text: "Smooth animations that make the website feel alive.",
+                  },
+                  {
+                    icon: <FaShieldAlt />,
+                    title: "Trust Builder",
+                    text: "Clean design that makes clients feel confident to contact you.",
+                  },
+                ].map((card) => (
+                  <motion.div
+                    key={card.title}
+                    whileHover={{ y: -12, scale: 1.035 }}
+                    className="rounded-3xl border border-white/10 bg-black/35 p-6 hover:border-red-500/50 transition group"
+                  >
+                    <div className="text-red-500 text-3xl mb-5 group-hover:scale-125 transition">
+                      {card.icon}
+                    </div>
+                    <h3 className="text-xl font-black">{card.title}</h3>
+                    <p className="text-gray-500 mt-3 leading-relaxed">
+                      {card.text}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </section>
@@ -695,19 +711,30 @@ export default function App() {
         <section id="founder" className="px-4 sm:px-6 py-16 sm:py-24">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -70, rotate: -3 }}
+              initial={{ opacity: 0, x: -60, rotate: -2 }}
               whileInView={{ opacity: 1, x: 0, rotate: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.85 }}
               className="relative"
             >
               <div className="absolute -inset-4 bg-red-600/20 blur-3xl rounded-full" />
-              <motion.img
-                whileHover={{ scale: 1.025, rotate: 1 }}
-                src={founder}
-                alt="Founder"
-                className="relative w-full h-[380px] sm:h-[520px] object-cover object-top rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)]"
-              />
+
+              <motion.div
+                whileHover={{ scale: 1.02, rotate: 1 }}
+                className="relative w-full h-[460px] sm:h-[520px] rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)] overflow-hidden bg-black/60 flex items-center justify-center p-3 sm:p-0"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/12 to-transparent z-10"
+                  animate={{ x: ["-120%", "120%"] }}
+                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.5 }}
+                />
+
+                <img
+                  src={founder}
+                  alt="Founder"
+                  className="relative z-0 w-full h-full object-contain sm:object-cover sm:object-top rounded-[1.5rem] sm:rounded-[2.5rem]"
+                />
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -746,27 +773,36 @@ export default function App() {
               >
                 {["Founder", "CEO", "Web Designer", "Digital Builder"].map(
                   (tag) => (
-                    <span
+                    <motion.span
                       key={tag}
+                      whileHover={{ y: -4, scale: 1.05 }}
                       className="rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-red-300 text-sm font-bold"
                     >
                       {tag}
-                    </span>
+                    </motion.span>
                   )
                 )}
               </motion.div>
 
               <motion.div
                 variants={fadeUp}
-                className="rounded-[2rem] border border-red-500/30 bg-red-500/10 p-6"
+                className="rounded-[2rem] border border-red-500/30 bg-red-500/10 p-6 relative overflow-hidden"
               >
-                <p className="text-2xl md:text-3xl font-black text-white">
-                  Wanna make your website look premium?
-                </p>
-                <p className="text-gray-400 mt-3 leading-relaxed">
-                  Send a message below and let Samurai Websites build your
-                  brand’s digital first impression.
-                </p>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
+                  animate={{ x: ["-120%", "120%"] }}
+                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                />
+
+                <div className="relative">
+                  <p className="text-2xl md:text-3xl font-black text-white">
+                    Wanna make your website look premium?
+                  </p>
+                  <p className="text-gray-400 mt-3 leading-relaxed">
+                    Send a message below and let Samurai Websites build your
+                    brand’s digital first impression.
+                  </p>
+                </div>
               </motion.div>
             </motion.div>
           </div>
@@ -810,13 +846,13 @@ export default function App() {
               ].map((service, index) => (
                 <motion.div
                   key={service.title}
-                  initial={{ opacity: 0, y: 60, scale: 0.92 }}
+                  initial={{ opacity: 0, y: 55, scale: 0.94 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, amount: 0.25 }}
-                  transition={{ delay: index * 0.12, duration: 0.7 }}
+                  transition={{ delay: index * 0.1, duration: 0.7 }}
                   whileHover={{
-                    y: -16,
-                    scale: 1.04,
+                    y: -14,
+                    scale: 1.035,
                     rotate: index === 1 ? 0 : index === 0 ? -1 : 1,
                   }}
                   className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-7 sm:p-8 hover:border-red-500/60 transition duration-300 relative overflow-hidden text-center sm:text-left"
@@ -886,7 +922,7 @@ export default function App() {
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-stretch">
             <motion.form
               onSubmit={handleSubmit}
-              initial={{ opacity: 0, x: -70 }}
+              initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
@@ -903,40 +939,23 @@ export default function App() {
               </h2>
 
               <div className="relative space-y-4">
-                <input
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your name"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
-                />
-
-                <input
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your email"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
-                />
-
-                <input
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Phone number"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
-                />
-
-                <input
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  placeholder="Budget"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
-                />
+                {[
+                  ["name", "Your name", "text"],
+                  ["email", "Your email", "email"],
+                  ["phone", "Phone number", "text"],
+                  ["budget", "Budget", "text"],
+                ].map(([name, placeholder, type]) => (
+                  <input
+                    key={name}
+                    name={name}
+                    type={type}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    required={name === "name" || name === "email"}
+                    placeholder={placeholder}
+                    className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.01] focus:scale-[1.01]"
+                  />
+                ))}
 
                 <textarea
                   name="message"
@@ -945,11 +964,11 @@ export default function App() {
                   required
                   placeholder="Tell us what website you want..."
                   rows="5"
-                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
+                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base hover:scale-[1.01] focus:scale-[1.01]"
                 />
 
                 <motion.button
-                  whileHover={{ scale: 1.035 }}
+                  whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.96 }}
                   type="submit"
                   disabled={sending}
@@ -997,7 +1016,7 @@ export default function App() {
             </motion.form>
 
             <motion.div
-              initial={{ opacity: 0, x: 70 }}
+              initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
