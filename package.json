@@ -1,11 +1,11 @@
 {
-  "name": "samurai-websites-backend",
+  "name": "samurai-websites-server",
   "version": "1.0.0",
-  "description": "Backend for Samurai Websites",
-  "main": "server.js",
+  "description": "Samurai Websites Backend",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node index.js",
+    "dev": "node index.js"
   },
   "keywords": [],
   "author": "Mithun Krrishnan D",
