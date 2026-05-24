@@ -42,7 +42,7 @@ export default function App() {
 
   const sparks = useMemo(
     () =>
-      Array.from({ length: 55 }, (_, i) => ({
+      Array.from({ length: 70 }, (_, i) => ({
         id: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
@@ -55,13 +55,26 @@ export default function App() {
 
   const orbitDots = useMemo(
     () =>
-      Array.from({ length: 16 }, (_, i) => ({
+      Array.from({ length: 18 }, (_, i) => ({
         id: i,
-        rotate: i * 22.5,
+        rotate: i * 20,
         delay: i * 0.08,
       })),
     []
   );
+
+  const slashLines = useMemo(
+    () =>
+      Array.from({ length: 16 }, (_, i) => ({
+        id: i,
+        top: `${6 + i * 6}%`,
+        delay: i * 0.16,
+        width: 100 + Math.random() * 200,
+      })),
+    []
+  );
+
+  const floatingWords = ["PREMIUM", "CINEMATIC", "SAMURAI", "MODERN", "BRAND"];
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 1600);
@@ -268,6 +281,52 @@ export default function App() {
           />
         ))}
 
+        {slashLines.map((line) => (
+          <motion.div
+            key={line.id}
+            className="absolute h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent rotate-[-18deg]"
+            style={{
+              top: line.top,
+              left: "-30%",
+              width: line.width,
+            }}
+            animate={{
+              x: ["0vw", "160vw"],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 2.4,
+              repeat: Infinity,
+              delay: line.delay,
+              repeatDelay: 3,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {floatingWords.map((word, index) => (
+          <motion.div
+            key={word}
+            className="absolute hidden sm:block text-white/[0.035] font-black tracking-[0.35em] text-4xl md:text-6xl"
+            style={{
+              top: `${18 + index * 16}%`,
+              left: index % 2 === 0 ? "6%" : "62%",
+            }}
+            animate={{
+              y: [0, -25, 0],
+              opacity: [0.025, 0.08, 0.025],
+              scale: [1, 1.08, 1],
+            }}
+            transition={{
+              duration: 5 + index,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            {word}
+          </motion.div>
+        ))}
+
         <motion.div
           className="absolute -top-44 -right-44 w-[620px] h-[620px] rounded-full bg-red-600/24 blur-[140px]"
           animate={{ scale: [1, 1.28, 1], opacity: [0.35, 0.8, 0.35] }}
@@ -398,6 +457,39 @@ export default function App() {
                 >
                   See The Power
                 </motion.a>
+              </motion.div>
+
+              <motion.div
+                variants={fadeUp}
+                className="relative mx-auto lg:mx-0 max-w-xl rounded-[2rem] border border-red-500/20 bg-black/40 p-4 overflow-hidden"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/15 to-transparent"
+                  animate={{ x: ["-120%", "120%"] }}
+                  transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.5 }}
+                />
+
+                <div className="relative flex items-center gap-4">
+                  <motion.div
+                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center shadow-[0_0_28px_rgba(239,68,68,0.8)]"
+                    animate={{
+                      rotate: [0, 8, -8, 0],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    ⚔️
+                  </motion.div>
+
+                  <div className="text-left">
+                    <p className="font-black text-white">
+                      Live cinematic brand system
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      Built to make your website feel expensive instantly.
+                    </p>
+                  </div>
+                </div>
               </motion.div>
 
               <motion.div
@@ -817,7 +909,7 @@ export default function App() {
                   onChange={handleChange}
                   required
                   placeholder="Your name"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
                 />
 
                 <input
@@ -827,7 +919,7 @@ export default function App() {
                   onChange={handleChange}
                   required
                   placeholder="Your email"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
                 />
 
                 <input
@@ -835,7 +927,7 @@ export default function App() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Phone number"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
                 />
 
                 <input
@@ -843,7 +935,7 @@ export default function App() {
                   value={formData.budget}
                   onChange={handleChange}
                   placeholder="Budget"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
                 />
 
                 <textarea
@@ -853,7 +945,7 @@ export default function App() {
                   required
                   placeholder="Tell us what website you want..."
                   rows="5"
-                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base"
+                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base hover:scale-[1.015] focus:scale-[1.015]"
                 />
 
                 <motion.button
