@@ -432,7 +432,7 @@ export default function App() {
                 className="relative rounded-[2.5rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl p-5 shadow-[0_0_85px_rgba(239,68,68,0.28)] overflow-hidden"
               >
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-10 pointer-events-none"
                   animate={{ x: ["-140%", "140%"] }}
                   transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2 }}
                 />
@@ -440,14 +440,14 @@ export default function App() {
                 <img
                   src={founder}
                   alt="Founder"
-                  className="w-full h-[520px] object-cover rounded-[2rem] border border-white/10"
+                  className="w-full h-[520px] object-cover object-top rounded-[2rem] border border-white/10"
                 />
 
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 2.5, duration: 0.8 }}
-                  className="absolute bottom-10 left-10 right-10 rounded-3xl bg-black/78 backdrop-blur-2xl border border-white/10 p-6 shadow-2xl"
+                  className="absolute bottom-10 left-10 right-10 rounded-3xl bg-black/78 backdrop-blur-2xl border border-white/10 p-6 shadow-2xl z-20"
                 >
                   <p className="text-red-500 font-black tracking-[0.25em] text-xs">
                     FOUNDER & CEO
@@ -480,7 +480,7 @@ export default function App() {
             </p>
 
             <h2 className="text-4xl md:text-6xl font-black mt-4">
-              Not just a website. A first impression weapon.
+              Wanna make your website look premium?
             </h2>
 
             <p className="text-gray-400 mt-6 text-lg md:text-xl leading-relaxed max-w-4xl">
@@ -539,7 +539,7 @@ export default function App() {
                 whileHover={{ scale: 1.025, rotate: 1 }}
                 src={founder}
                 alt="Founder"
-                className="relative w-full h-[520px] object-cover rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)]"
+                className="relative w-full h-[520px] object-cover object-top rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)]"
               />
             </motion.div>
 
@@ -586,15 +586,18 @@ export default function App() {
                 )}
               </motion.div>
 
-              <motion.a
+              <motion.div
                 variants={fadeUp}
-                href="#contact"
-                whileHover={{ scale: 1.06, y: -3 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center gap-3 rounded-full bg-red-600 px-7 py-4 font-black shadow-[0_0_40px_rgba(239,68,68,0.45)]"
+                className="rounded-[2rem] border border-red-500/30 bg-red-500/10 p-6"
               >
-                Work With Me <FaArrowRight />
-              </motion.a>
+                <p className="text-2xl md:text-3xl font-black text-white">
+                  Wanna make your website look premium?
+                </p>
+                <p className="text-gray-400 mt-3 leading-relaxed">
+                  Send a message below and let Samurai Websites build your
+                  brand’s digital first impression.
+                </p>
+              </motion.div>
             </motion.div>
           </div>
         </section>
