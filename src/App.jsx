@@ -129,7 +129,7 @@ function App() {
   e.preventDefault();
 
   try {
-    const res = await fetch("https://samurai-websites.onrender.com/register", {
+    const res = await fetch("https://samurai-websites.onrender.com", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
