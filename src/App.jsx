@@ -64,7 +64,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1800);
+    const timer = setTimeout(() => setLoaded(true), 1600);
 
     const move = (e) => {
       setCursor({ x: e.clientX, y: e.clientY });
@@ -124,12 +124,12 @@ export default function App() {
   };
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 60, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 55, filter: "blur(10px)" },
     visible: {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.85, ease: "easeOut" },
+      transition: { duration: 0.8, ease: "easeOut" },
     },
   };
 
@@ -137,7 +137,7 @@ export default function App() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.12,
+        staggerChildren: 0.11,
       },
     },
   };
@@ -147,7 +147,7 @@ export default function App() {
       <AnimatePresence>
         {!loaded && (
           <motion.div
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black"
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black px-4"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.1, filter: "blur(16px)" }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -174,7 +174,7 @@ export default function App() {
               <motion.img
                 src={logo}
                 alt="Samurai Logo"
-                className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_45px_rgba(239,68,68,1)]"
+                className="w-24 h-24 sm:w-32 sm:h-32 object-contain mx-auto mb-6 sm:mb-8 drop-shadow-[0_0_45px_rgba(239,68,68,1)]"
                 animate={{
                   y: [0, -16, 0],
                   rotate: [0, 4, -4, 0],
@@ -188,23 +188,23 @@ export default function App() {
               />
 
               <motion.h1
-                className="text-4xl md:text-7xl font-black tracking-[0.35em] text-red-500"
+                className="text-3xl sm:text-4xl md:text-7xl font-black tracking-[0.18em] sm:tracking-[0.35em] text-red-500"
                 initial={{ opacity: 0, letterSpacing: "0.05em" }}
-                animate={{ opacity: 1, letterSpacing: "0.35em" }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
               >
                 SAMURAI
               </motion.h1>
 
               <motion.div
-                className="mt-6 h-1 w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full shadow-[0_0_30px_rgba(239,68,68,1)]"
+                className="mt-6 h-1 w-56 sm:w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full shadow-[0_0_30px_rgba(239,68,68,1)]"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1.1, delay: 0.4 }}
               />
 
               <motion.p
-                className="mt-5 text-gray-300 tracking-[0.28em] text-sm"
+                className="mt-5 text-gray-300 tracking-[0.14em] sm:tracking-[0.28em] text-xs sm:text-sm"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
@@ -284,18 +284,18 @@ export default function App() {
       <motion.nav
         initial={{ y: -90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/55 backdrop-blur-2xl px-5 md:px-7 py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
+        transition={{ delay: 1.6, duration: 0.8, ease: "easeOut" }}
+        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/60 backdrop-blur-2xl px-4 sm:px-7 py-3 sm:py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
       >
-        <a href="#" className="flex items-center gap-3">
+        <a href="#" className="flex items-center gap-2 sm:gap-3">
           <motion.img
             src={logo}
             alt="Samurai Websites Logo"
-            className="w-10 h-10 object-contain drop-shadow-[0_0_18px_rgba(239,68,68,0.9)]"
+            className="w-8 h-8 sm:w-10 sm:h-10 object-contain drop-shadow-[0_0_18px_rgba(239,68,68,0.9)]"
             whileHover={{ rotate: 360, scale: 1.18 }}
             transition={{ duration: 0.7 }}
           />
-          <span className="font-black tracking-[0.35em] text-red-500 text-xs md:text-sm">
+          <span className="font-black tracking-[0.2em] sm:tracking-[0.35em] text-red-500 text-[10px] sm:text-sm">
             SAMURAI
           </span>
         </a>
@@ -317,14 +317,14 @@ export default function App() {
           href="#contact"
           whileHover={{ scale: 1.08, y: -2 }}
           whileTap={{ scale: 0.95 }}
-          className="hidden sm:flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-sm font-black hover:bg-red-700 transition shadow-lg shadow-red-600/30"
+          className="flex items-center gap-2 rounded-full bg-red-600 px-4 sm:px-5 py-2 text-xs sm:text-sm font-black hover:bg-red-700 transition shadow-lg shadow-red-600/30"
         >
-          Start <FaArrowRight />
+          Start <FaArrowRight className="hidden sm:block" />
         </motion.a>
       </motion.nav>
 
       <main className="relative z-10">
-        <section className="min-h-screen flex items-center pt-36 px-6">
+        <section className="min-h-screen flex items-center pt-28 sm:pt-36 px-4 sm:px-6">
           <motion.div
             style={{ y: heroY }}
             className="absolute top-28 left-1/2 -translate-x-1/2 text-[18vw] font-black text-white/[0.025] tracking-tighter pointer-events-none whitespace-nowrap"
@@ -332,23 +332,23 @@ export default function App() {
             SAMURAI
           </motion.div>
 
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
             <motion.div
               variants={stagger}
               initial="hidden"
               animate="visible"
-              className="space-y-8"
+              className="space-y-6 sm:space-y-8 text-center lg:text-left"
             >
               <motion.div
                 variants={fadeUp}
-                className="inline-flex items-center gap-3 rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-red-400 text-sm font-black tracking-[0.24em] shadow-[0_0_25px_rgba(239,68,68,0.18)]"
+                className="inline-flex items-center gap-3 rounded-full border border-red-500/30 bg-red-500/10 px-4 sm:px-5 py-2 text-red-400 text-[11px] sm:text-sm font-black tracking-[0.16em] sm:tracking-[0.24em] shadow-[0_0_25px_rgba(239,68,68,0.18)]"
               >
                 <FaFire /> FUTURISTIC WEB DESIGN
               </motion.div>
 
               <motion.h1
                 variants={fadeUp}
-                className="text-5xl md:text-7xl xl:text-8xl font-black leading-[0.92]"
+                className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black leading-[0.95]"
               >
                 Samurai Websites{" "}
                 <motion.span
@@ -369,19 +369,22 @@ export default function App() {
 
               <motion.p
                 variants={fadeUp}
-                className="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed"
+                className="text-gray-400 text-base sm:text-lg md:text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed"
               >
                 Cinematic websites. Luxury interfaces. Samurai precision.
                 Designed to make your brand look powerful, trusted, and
                 unforgettable.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
+              <motion.div
+                variants={fadeUp}
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              >
                 <motion.a
                   whileHover={{ scale: 1.07, y: -4 }}
                   whileTap={{ scale: 0.96 }}
                   href="#contact"
-                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] flex items-center gap-3"
+                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] flex items-center justify-center gap-3"
                 >
                   Build My Website
                   <FaRocket className="group-hover:translate-x-1 group-hover:-translate-y-1 transition" />
@@ -391,7 +394,7 @@ export default function App() {
                   whileHover={{ scale: 1.07, y: -4 }}
                   whileTap={{ scale: 0.96 }}
                   href="#services"
-                  className="px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:border-red-500 hover:bg-red-500/10 transition font-bold"
+                  className="px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:border-red-500 hover:bg-red-500/10 transition font-bold flex items-center justify-center"
                 >
                   See The Power
                 </motion.a>
@@ -399,7 +402,7 @@ export default function App() {
 
               <motion.div
                 variants={fadeUp}
-                className="grid grid-cols-3 gap-4 max-w-xl pt-6"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0 pt-4 sm:pt-6"
               >
                 {[
                   ["Premium", "Brand Feel"],
@@ -411,7 +414,7 @@ export default function App() {
                     whileHover={{ y: -8, scale: 1.04 }}
                     className="rounded-3xl border border-white/10 bg-white/[0.045] p-5 backdrop-blur-xl hover:border-red-500/50 transition"
                   >
-                    <p className="text-xl md:text-3xl font-black text-red-500">
+                    <p className="text-2xl sm:text-xl md:text-3xl font-black text-red-500">
                       {num}
                     </p>
                     <p className="text-gray-500 text-xs md:text-sm mt-1">
@@ -425,8 +428,8 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0, scale: 0.85, rotate: 4 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 2.05, duration: 1, ease: "easeOut" }}
-              className="relative min-h-[620px] flex items-center justify-center"
+              transition={{ delay: 1.9, duration: 1, ease: "easeOut" }}
+              className="relative min-h-[420px] sm:min-h-[620px] flex items-center justify-center"
             >
               <motion.div
                 className="absolute -inset-10 bg-red-600/25 blur-3xl rounded-full"
@@ -435,9 +438,9 @@ export default function App() {
               />
 
               <motion.div
-                animate={{ y: [0, -18, 0] }}
+                animate={{ y: [0, -14, 0] }}
                 transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-full max-w-[620px] h-[560px] rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
+                className="relative w-full max-w-[620px] h-[390px] sm:h-[560px] rounded-[2rem] sm:rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20 pointer-events-none"
@@ -446,7 +449,7 @@ export default function App() {
                 />
 
                 <motion.div
-                  className="absolute inset-8 rounded-[2.2rem] border border-red-500/25"
+                  className="absolute inset-5 sm:inset-8 rounded-[1.6rem] sm:rounded-[2.2rem] border border-red-500/25"
                   animate={{
                     boxShadow: [
                       "0 0 25px rgba(239,68,68,0.25)",
@@ -458,13 +461,13 @@ export default function App() {
                 />
 
                 <motion.div
-                  className="absolute w-[390px] h-[390px] rounded-full border border-red-500/30"
+                  className="absolute w-[240px] h-[240px] sm:w-[390px] sm:h-[390px] rounded-full border border-red-500/30"
                   animate={{ rotate: 360 }}
                   transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
                 />
 
                 <motion.div
-                  className="absolute w-[490px] h-[490px] rounded-full border border-white/10"
+                  className="absolute w-[310px] h-[310px] sm:w-[490px] sm:h-[490px] rounded-full border border-white/10"
                   animate={{ rotate: -360 }}
                   transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
                 />
@@ -472,7 +475,7 @@ export default function App() {
                 {orbitDots.map((dot) => (
                   <motion.div
                     key={dot.id}
-                    className="absolute w-[430px] h-[430px]"
+                    className="absolute w-[280px] h-[280px] sm:w-[430px] sm:h-[430px]"
                     style={{ rotate: dot.rotate }}
                     animate={{ rotate: dot.rotate + 360 }}
                     transition={{
@@ -487,15 +490,15 @@ export default function App() {
                 ))}
 
                 <motion.div
-                  className="relative z-30 text-center px-8"
+                  className="relative z-30 text-center px-6 sm:px-8"
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 2.35, duration: 0.8 }}
+                  transition={{ delay: 2.2, duration: 0.8 }}
                 >
                   <motion.img
                     src={logo}
                     alt="Samurai Websites Brand Logo"
-                    className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
+                    className="w-20 h-20 sm:w-32 sm:h-32 object-contain mx-auto mb-5 sm:mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
                     animate={{
                       y: [0, -14, 0],
                       rotate: [0, 3, -3, 0],
@@ -505,7 +508,7 @@ export default function App() {
                   />
 
                   <motion.h2
-                    className="text-4xl md:text-6xl font-black tracking-tight"
+                    className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight"
                     animate={{
                       textShadow: [
                         "0 0 18px rgba(255,255,255,0.15)",
@@ -519,13 +522,13 @@ export default function App() {
                     <span className="block text-red-500">WEBSITES</span>
                   </motion.h2>
 
-                  <p className="mt-6 text-gray-300 text-lg leading-relaxed">
+                  <p className="mt-4 sm:mt-6 text-gray-300 text-sm sm:text-lg leading-relaxed">
                     Premium digital experiences forged with cinematic motion,
                     modern UI, and samurai precision.
                   </p>
 
                   <motion.div
-                    className="mt-8 inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-6 py-3 text-red-300 font-black tracking-[0.18em] text-xs"
+                    className="mt-6 sm:mt-8 inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-4 sm:px-6 py-3 text-red-300 font-black tracking-[0.12em] sm:tracking-[0.18em] text-[10px] sm:text-xs"
                     animate={{ scale: [1, 1.04, 1] }}
                     transition={{ duration: 1.8, repeat: Infinity }}
                   >
@@ -537,25 +540,25 @@ export default function App() {
           </div>
         </section>
 
-        <section id="about" className="px-6 py-24">
+        <section id="about" className="px-4 sm:px-6 py-16 sm:py-24">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
-            className="max-w-6xl mx-auto rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-8 md:p-14 relative overflow-hidden shadow-[0_0_70px_rgba(239,68,68,0.12)]"
+            className="max-w-6xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-[0_0_70px_rgba(239,68,68,0.12)]"
           >
             <div className="absolute -right-32 -top-32 w-80 h-80 bg-red-600/20 rounded-full blur-3xl" />
 
-            <p className="text-red-500 tracking-[0.35em] font-black text-sm">
+            <p className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
               ABOUT
             </p>
 
-            <h2 className="text-4xl md:text-6xl font-black mt-4">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black mt-4">
               Wanna make your website look premium?
             </h2>
 
-            <p className="text-gray-400 mt-6 text-lg md:text-xl leading-relaxed max-w-4xl">
+            <p className="text-gray-400 mt-6 text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl">
               Samurai Websites helps businesses look premium online with bold
               visuals, cinematic motion, smooth sections, and forms that turn
               visitors into real client conversations.
@@ -597,7 +600,7 @@ export default function App() {
           </motion.div>
         </section>
 
-        <section id="founder" className="px-6 py-24">
+        <section id="founder" className="px-4 sm:px-6 py-16 sm:py-24">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
             <motion.div
               initial={{ opacity: 0, x: -70, rotate: -3 }}
@@ -611,7 +614,7 @@ export default function App() {
                 whileHover={{ scale: 1.025, rotate: 1 }}
                 src={founder}
                 alt="Founder"
-                className="relative w-full h-[520px] object-cover object-top rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)]"
+                className="relative w-full h-[380px] sm:h-[520px] object-cover object-top rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)]"
               />
             </motion.div>
 
@@ -620,32 +623,35 @@ export default function App() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.25 }}
-              className="space-y-6"
+              className="space-y-6 text-center lg:text-left"
             >
               <motion.p
                 variants={fadeUp}
-                className="text-red-500 tracking-[0.35em] font-black text-sm"
+                className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm"
               >
                 THE FOUNDER
               </motion.p>
 
               <motion.h2
                 variants={fadeUp}
-                className="text-4xl md:text-6xl font-black"
+                className="text-3xl sm:text-4xl md:text-6xl font-black"
               >
                 Mithun Krrishnan D
               </motion.h2>
 
               <motion.p
                 variants={fadeUp}
-                className="text-gray-400 text-lg leading-relaxed"
+                className="text-gray-400 text-base sm:text-lg leading-relaxed"
               >
                 Founder & CEO of Samurai Websites. Building futuristic websites
                 for brands that want to look premium, powerful, and
                 unforgettable.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
+              <motion.div
+                variants={fadeUp}
+                className="flex flex-wrap gap-3 justify-center lg:justify-start"
+              >
                 {["Founder", "CEO", "Web Designer", "Digital Builder"].map(
                   (tag) => (
                     <span
@@ -674,19 +680,20 @@ export default function App() {
           </div>
         </section>
 
-        <section id="services" className="px-6 py-24">
+        <section id="services" className="px-4 sm:px-6 py-16 sm:py-24">
           <div className="max-w-7xl mx-auto">
             <motion.div
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.25 }}
+              className="text-center lg:text-left"
             >
-              <p className="text-red-500 tracking-[0.35em] font-black text-sm">
+              <p className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
                 SERVICES
               </p>
 
-              <h2 className="text-4xl md:text-6xl font-black mt-4 mb-12">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black mt-4 mb-10 sm:mb-12">
                 What your clients will see
               </h2>
             </motion.div>
@@ -720,12 +727,12 @@ export default function App() {
                     scale: 1.04,
                     rotate: index === 1 ? 0 : index === 0 ? -1 : 1,
                   }}
-                  className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-8 hover:border-red-500/60 transition duration-300 relative overflow-hidden"
+                  className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-7 sm:p-8 hover:border-red-500/60 transition duration-300 relative overflow-hidden text-center sm:text-left"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 via-red-600/0 to-red-600/20 opacity-0 group-hover:opacity-100 transition duration-300" />
 
                   <motion.div
-                    className="relative text-4xl mb-6 text-red-500"
+                    className="relative text-4xl mb-6 text-red-500 flex justify-center sm:block"
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.8 }}
                   >
@@ -745,14 +752,14 @@ export default function App() {
           </div>
         </section>
 
-        <section className="px-6 py-24">
+        <section className="px-4 sm:px-6 py-16 sm:py-24">
           <div className="max-w-7xl mx-auto">
             <motion.div
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.25 }}
-              className="rounded-[2.5rem] border border-red-500/25 bg-red-950/20 p-8 md:p-14 backdrop-blur-xl relative overflow-hidden"
+              className="rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/25 bg-red-950/20 p-6 sm:p-8 md:p-14 backdrop-blur-xl relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
@@ -760,7 +767,7 @@ export default function App() {
                 transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
               />
 
-              <div className="relative grid md:grid-cols-4 gap-6">
+              <div className="relative grid sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 {[
                   "Looks premium",
                   "Loads clean",
@@ -772,7 +779,7 @@ export default function App() {
                     whileHover={{ scale: 1.05, y: -6 }}
                     className="rounded-3xl bg-black/35 border border-white/10 p-6 flex items-center gap-4"
                   >
-                    <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_24px_rgba(239,68,68,0.8)]">
+                    <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_24px_rgba(239,68,68,0.8)] shrink-0">
                       <FaCheck />
                     </span>
                     <p className="font-black">{item}</p>
@@ -783,7 +790,7 @@ export default function App() {
           </div>
         </section>
 
-        <section id="contact" className="px-6 py-24">
+        <section id="contact" className="px-4 sm:px-6 py-16 sm:py-24">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-stretch">
             <motion.form
               onSubmit={handleSubmit}
@@ -791,15 +798,15 @@ export default function App() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
-              className="rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-8 md:p-10 shadow-2xl relative overflow-hidden"
+              className="rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden"
             >
               <div className="absolute -top-32 -right-32 w-72 h-72 rounded-full bg-red-600/20 blur-3xl" />
 
-              <p className="relative text-red-500 tracking-[0.35em] font-black text-sm">
+              <p className="relative text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
                 CONTACT
               </p>
 
-              <h2 className="relative text-4xl md:text-5xl font-black mt-4 mb-8">
+              <h2 className="relative text-3xl sm:text-4xl md:text-5xl font-black mt-4 mb-8">
                 Ready to look premium?
               </h2>
 
@@ -810,7 +817,7 @@ export default function App() {
                   onChange={handleChange}
                   required
                   placeholder="Your name"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
                 />
 
                 <input
@@ -820,7 +827,7 @@ export default function App() {
                   onChange={handleChange}
                   required
                   placeholder="Your email"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
                 />
 
                 <input
@@ -828,7 +835,7 @@ export default function App() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Phone number"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
                 />
 
                 <input
@@ -836,7 +843,7 @@ export default function App() {
                   value={formData.budget}
                   onChange={handleChange}
                   placeholder="Budget"
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base"
                 />
 
                 <textarea
@@ -846,7 +853,7 @@ export default function App() {
                   required
                   placeholder="Tell us what website you want..."
                   rows="5"
-                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition"
+                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base"
                 />
 
                 <motion.button
@@ -888,7 +895,7 @@ export default function App() {
                       initial={{ opacity: 0, y: 20, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                      className="rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-300 font-bold"
+                      className="rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-300 font-bold text-sm sm:text-base"
                     >
                       Message delivered to Samurai Websites 🔥
                     </motion.div>
@@ -902,7 +909,7 @@ export default function App() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
-              className="rounded-[2.5rem] border border-red-500/30 bg-red-950/20 backdrop-blur-xl p-8 md:p-10 flex flex-col justify-center relative overflow-hidden"
+              className="rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 bg-red-950/20 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col justify-center relative overflow-hidden text-center lg:text-left"
             >
               <motion.div
                 className="absolute -right-24 top-10 w-64 h-64 bg-red-600/20 rounded-full blur-3xl"
@@ -911,16 +918,16 @@ export default function App() {
               />
 
               <div className="relative">
-                <h2 className="text-4xl md:text-6xl font-black">
+                <h2 className="text-3xl sm:text-4xl md:text-6xl font-black">
                   SAMURAI WEBSITES
                 </h2>
 
-                <p className="text-gray-400 mt-5 leading-relaxed text-lg">
+                <p className="text-gray-400 mt-5 leading-relaxed text-base sm:text-lg">
                   A premium website is not just design. It is trust, attention,
                   and a reason for customers to contact you before someone else.
                 </p>
 
-                <div className="flex gap-5 text-3xl mt-8 text-red-500">
+                <div className="flex justify-center lg:justify-start gap-5 text-3xl mt-8 text-red-500">
                   <motion.span whileHover={{ y: -8, scale: 1.2 }}>
                     <FaDiscord />
                   </motion.span>
@@ -932,7 +939,7 @@ export default function App() {
                   </motion.span>
                 </div>
 
-                <div className="mt-10 space-y-4">
+                <div className="mt-10 space-y-4 text-left">
                   {[
                     "Premium animated website design",
                     "Founder and business portfolio sections",
@@ -943,7 +950,7 @@ export default function App() {
                       key={item}
                       className="flex items-center gap-3 text-gray-300"
                     >
-                      <span className="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,1)]" />
+                      <span className="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,1)] shrink-0" />
                       {item}
                     </div>
                   ))}
@@ -953,7 +960,7 @@ export default function App() {
           </div>
         </section>
 
-        <footer className="px-6 py-10 border-t border-white/10 text-center text-gray-500 relative">
+        <footer className="px-4 sm:px-6 py-10 border-t border-white/10 text-center text-gray-500 relative text-sm">
           <p>© 2026 Samurai Websites. Built with precision.</p>
         </footer>
       </main>
