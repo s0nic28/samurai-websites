@@ -42,13 +42,23 @@ export default function App() {
 
   const sparks = useMemo(
     () =>
-      Array.from({ length: 38 }, (_, i) => ({
+      Array.from({ length: 55 }, (_, i) => ({
         id: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
         delay: Math.random() * 4,
-        duration: 3 + Math.random() * 5,
+        duration: 2.5 + Math.random() * 5,
         size: 2 + Math.random() * 5,
+      })),
+    []
+  );
+
+  const orbitDots = useMemo(
+    () =>
+      Array.from({ length: 16 }, (_, i) => ({
+        id: i,
+        rotate: i * 22.5,
+        delay: i * 0.08,
       })),
     []
   );
@@ -146,9 +156,7 @@ export default function App() {
 
             <motion.div
               className="absolute inset-0 opacity-30"
-              animate={{
-                backgroundPosition: ["0px 0px", "120px 120px"],
-              }}
+              animate={{ backgroundPosition: ["0px 0px", "120px 120px"] }}
               transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
               style={{
                 backgroundImage:
@@ -201,7 +209,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
               >
-                FORGING DIGITAL EMPIRES
+                FORGING PREMIUM DIGITAL EXPERIENCES
               </motion.p>
             </motion.div>
           </motion.div>
@@ -342,7 +350,7 @@ export default function App() {
                 variants={fadeUp}
                 className="text-5xl md:text-7xl xl:text-8xl font-black leading-[0.92]"
               >
-                Websites that make clients{" "}
+                Samurai Websites{" "}
                 <motion.span
                   className="relative inline-block text-red-500 drop-shadow-[0_0_34px_rgba(239,68,68,0.7)]"
                   animate={{
@@ -354,7 +362,7 @@ export default function App() {
                   }}
                   transition={{ duration: 2.2, repeat: Infinity }}
                 >
-                  call you first.
+                  builds premium.
                   <span className="absolute left-0 -bottom-2 w-full h-2 bg-red-600/40 blur-md" />
                 </motion.span>
               </motion.h1>
@@ -363,9 +371,9 @@ export default function App() {
                 variants={fadeUp}
                 className="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed"
               >
-                Samurai Websites creates cinematic, premium, animated business
-                websites designed to make your brand look expensive, trusted,
-                and impossible to ignore.
+                Cinematic websites. Luxury interfaces. Samurai precision.
+                Designed to make your brand look powerful, trusted, and
+                unforgettable.
               </motion.p>
 
               <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
@@ -395,7 +403,7 @@ export default function App() {
               >
                 {[
                   ["Premium", "Brand Feel"],
-                  ["Fast", "Modern Build"],
+                  ["Cinematic", "Motion UI"],
                   ["Lead", "Focused Design"],
                 ].map(([num, label]) => (
                   <motion.div
@@ -418,7 +426,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.85, rotate: 4 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ delay: 2.05, duration: 1, ease: "easeOut" }}
-              className="relative"
+              className="relative min-h-[620px] flex items-center justify-center"
             >
               <motion.div
                 className="absolute -inset-10 bg-red-600/25 blur-3xl rounded-full"
@@ -429,36 +437,100 @@ export default function App() {
               <motion.div
                 animate={{ y: [0, -18, 0] }}
                 transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-                className="relative rounded-[2.5rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl p-5 shadow-[0_0_85px_rgba(239,68,68,0.28)] overflow-hidden"
+                className="relative w-full max-w-[620px] h-[560px] rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
               >
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-10 pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20 pointer-events-none"
                   animate={{ x: ["-140%", "140%"] }}
                   transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2 }}
                 />
 
-                <img
-                  src={founder}
-                  alt="Founder"
-                  className="w-full h-[520px] object-cover object-top rounded-[2rem] border border-white/10"
+                <motion.div
+                  className="absolute inset-8 rounded-[2.2rem] border border-red-500/25"
+                  animate={{
+                    boxShadow: [
+                      "0 0 25px rgba(239,68,68,0.25)",
+                      "0 0 70px rgba(239,68,68,0.55)",
+                      "0 0 25px rgba(239,68,68,0.25)",
+                    ],
+                  }}
+                  transition={{ duration: 2.8, repeat: Infinity }}
                 />
 
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 2.5, duration: 0.8 }}
-                  className="absolute bottom-10 left-10 right-10 rounded-3xl bg-black/78 backdrop-blur-2xl border border-white/10 p-6 shadow-2xl z-20"
+                  className="absolute w-[390px] h-[390px] rounded-full border border-red-500/30"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                />
+
+                <motion.div
+                  className="absolute w-[490px] h-[490px] rounded-full border border-white/10"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+                />
+
+                {orbitDots.map((dot) => (
+                  <motion.div
+                    key={dot.id}
+                    className="absolute w-[430px] h-[430px]"
+                    style={{ rotate: dot.rotate }}
+                    animate={{ rotate: dot.rotate + 360 }}
+                    transition={{
+                      duration: 22,
+                      repeat: Infinity,
+                      ease: "linear",
+                      delay: dot.delay,
+                    }}
+                  >
+                    <span className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]" />
+                  </motion.div>
+                ))}
+
+                <motion.div
+                  className="relative z-30 text-center px-8"
+                  initial={{ scale: 0.85, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 2.35, duration: 0.8 }}
                 >
-                  <p className="text-red-500 font-black tracking-[0.25em] text-xs">
-                    FOUNDER & CEO
+                  <motion.img
+                    src={logo}
+                    alt="Samurai Websites Brand Logo"
+                    className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
+                    animate={{
+                      y: [0, -14, 0],
+                      rotate: [0, 3, -3, 0],
+                      scale: [1, 1.08, 1],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+
+                  <motion.h2
+                    className="text-4xl md:text-6xl font-black tracking-tight"
+                    animate={{
+                      textShadow: [
+                        "0 0 18px rgba(255,255,255,0.15)",
+                        "0 0 32px rgba(239,68,68,0.55)",
+                        "0 0 18px rgba(255,255,255,0.15)",
+                      ],
+                    }}
+                    transition={{ duration: 2.4, repeat: Infinity }}
+                  >
+                    SAMURAI
+                    <span className="block text-red-500">WEBSITES</span>
+                  </motion.h2>
+
+                  <p className="mt-6 text-gray-300 text-lg leading-relaxed">
+                    Premium digital experiences forged with cinematic motion,
+                    modern UI, and samurai precision.
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-black mt-2">
-                    Mithun Krrishnan D
-                  </h2>
-                  <p className="text-gray-400 text-sm mt-3 leading-relaxed">
-                    Building premium digital experiences with cinematic
-                    animations, clean code, and samurai-level precision.
-                  </p>
+
+                  <motion.div
+                    className="mt-8 inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-6 py-3 text-red-300 font-black tracking-[0.18em] text-xs"
+                    animate={{ scale: [1, 1.04, 1] }}
+                    transition={{ duration: 1.8, repeat: Infinity }}
+                  >
+                    <FaBolt /> CRAFTED TO IMPRESS
+                  </motion.div>
                 </motion.div>
               </motion.div>
             </motion.div>
