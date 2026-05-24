@@ -125,42 +125,30 @@ function App() {
     return () => clearInterval(t);
   }, []);
 
-  const handleContactSubmit = async (e) => {
-    e.preventDefault();
-    setSending(true);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const form = e.currentTarget;
+  try {
+    const res = await fetch("https://samurai-websites.onrender.com/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      budget: form.budget.value,
-      message: form.message.value,
-    };
+    const data = await res.json();
 
-    try {
-      const res = await fetch("https://samurai-websites.onrender.com", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (result.success) {
-        alert("Message sent successfully!");
-        form.reset();
-      } else {
-        alert(result.message || "Something went wrong.");
-      }
-    } catch {
-      alert("Backend is not running.");
-    } finally {
-      setSending(false);
+    if (data.success) {
+      alert("Registration successful 🔥");
+    } else {
+      alert("Registration failed");
     }
-  };
-
+  } catch (error) {
+    console.error(error);
+    alert("Backend is not working");
+  }
+};
   return (
     <div className="bg-black text-white overflow-hidden">
       <motion.div
