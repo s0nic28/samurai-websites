@@ -1,527 +1,326 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import gsap from "gsap";
-import Lenis from "@studio-freight/lenis";
-import founderPhoto from "./assets/founder.jpg";
-import {
-  FaArrowRight,
-  FaBars,
-  FaBolt,
-  FaCode,
-  FaDiscord,
-  FaEnvelope,
-  FaInstagram,
-  FaLayerGroup,
-  FaMobileAlt,
-  FaPaintBrush,
-  FaRobot,
-  FaRocket,
-  FaSearch,
-  FaTimes,
-  FaCrown,
-} from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import logo from "./assets/logo.png";
+import founder from "./assets/founder.jpg";
+import "./index.css";
 
-const services = [
-  ["Web Design", FaPaintBrush],
-  ["UI/UX Design", FaLayerGroup],
-  ["Animated Websites", FaRocket],
-  ["Landing Pages", FaBolt],
-  ["Business Websites", FaCode],
-  ["AI Integration", FaRobot],
-];
-
-const why = [
-  ["Lightning Fast", FaBolt],
-  ["Futuristic Design", FaRocket],
-  ["Mobile Optimized", FaMobileAlt],
-  ["SEO Ready", FaSearch],
-  ["Smooth Animations", FaLayerGroup],
-];
-
-const testimonials = [
-  "Samurai Websites made our brand feel premium instantly.",
-  "The animations, speed, and design quality were unreal.",
-  "It looked like an Awwwards site from day one.",
-];
-
-function MagneticButton({ children, className = "", type = "button" }) {
-  const ref = useRef(null);
-
-  const move = (e) => {
-    const rect = ref.current.getBoundingClientRect();
-    gsap.to(ref.current, {
-      x: (e.clientX - rect.left - rect.width / 2) * 0.25,
-      y: (e.clientY - rect.top - rect.height / 2) * 0.25,
-      duration: 0.3,
-    });
-  };
-
-  const leave = () => {
-    gsap.to(ref.current, {
-      x: 0,
-      y: 0,
-      duration: 0.5,
-      ease: "elastic.out(1,0.4)",
-    });
-  };
-
-  return (
-    <button
-      ref={ref}
-      type={type}
-      onMouseMove={move}
-      onMouseLeave={leave}
-      className={`rounded-full px-7 py-4 font-bold transition-all ${className}`}
-    >
-      {children}
-    </button>
-  );
-}
-
-function App() {
-  const [intro, setIntro] = useState(true);
-  const [menu, setMenu] = useState(false);
-  const [testimonial, setTestimonial] = useState(0);
+export default function App() {
+  const [loaded, setLoaded] = useState(false);
   const [sending, setSending] = useState(false);
-
-  const cursor = useRef(null);
-  const glow = useRef(null);
-
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -220]);
-
-  useEffect(() => {
-    const lenis = new Lenis({ duration: 1.4, smoothWheel: true });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    const timer = setTimeout(() => setIntro(false), 5600);
-
-    const moveCursor = (e) => {
-      if (!cursor.current || !glow.current) return;
-      gsap.to(cursor.current, { x: e.clientX, y: e.clientY, duration: 0.15 });
-      gsap.to(glow.current, { x: e.clientX, y: e.clientY, duration: 0.6 });
-    };
-
-    window.addEventListener("mousemove", moveCursor);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("mousemove", moveCursor);
-      lenis.destroy();
-    };
-  }, []);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    budget: "",
+    message: "",
+  });
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 3500);
-
-    return () => clearInterval(t);
+    const timer = setTimeout(() => setLoaded(true), 300);
+    return () => clearTimeout(timer);
   }, []);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    setSending(true);
 
-  try {
-    const res = await fetch("https://samurai-websites.onrender.com/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await fetch("https://samurai-websites.onrender.com/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      alert("Registration successful 🔥");
-    } else {
-      alert("Registration failed");
+      if (data.success) {
+        alert("Registration successful 🔥");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          budget: "",
+          message: "",
+        });
+      } else {
+        alert("Registration failed");
+      }
+    } catch (error) {
+      console.error("Backend error:", error);
+      alert("Backend is not working");
+    } finally {
+      setSending(false);
     }
-  } catch (error) {
-    console.error(error);
-    alert("Backend is not working");
-  }
-};
+  };
+
   return (
-    <div className="bg-black text-white overflow-hidden">
-      <motion.div
-        style={{ scaleX: scrollYProgress }}
-        className="fixed top-0 left-0 z-[999] h-1 w-full origin-left bg-red-600"
-      />
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_top_right,rgba(220,38,38,0.35),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(239,68,68,0.25),transparent_35%)] pointer-events-none" />
 
-      <div ref={cursor} className="pointer-events-none fixed z-[999] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 mix-blend-difference" />
-      <div ref={glow} className="pointer-events-none fixed z-[1] h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600/20 blur-[140px]" />
-
-      <AnimatePresence>
-        {intro && (
-          <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center bg-black">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.8, 0.3] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute h-[800px] w-[800px] rounded-full bg-red-600/20 blur-[180px]"
-            />
-
-            <motion.div
-              initial={{ scaleX: 0, rotate: -12 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, ease: "easeInOut", delay: 0.7 }}
-              className="absolute h-[4px] w-[120vw] bg-red-500 shadow-[0_0_80px_20px_rgba(220,38,38,0.95)]"
-            />
-
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1.2, delay: 1.4 }}
-              className="absolute h-72 w-72 rounded-full border border-red-500/50 shadow-[0_0_120px_rgba(220,38,38,0.5)]"
-            />
-
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="absolute h-96 w-96 rounded-full border border-red-500/20"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, y: 60, filter: "blur(20px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: 2, duration: 1.2 }}
-              className="relative z-10 text-center"
-            >
-              <motion.p
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.8 }}
-                className="mb-5 text-red-500 tracking-[0.6em]"
-              >
-                侍 SYSTEM ONLINE
-              </motion.p>
-
-              <h1 className="text-5xl md:text-8xl font-black tracking-[0.25em]">
-                SAMURAI
-              </h1>
-
-              <motion.h2
-                initial={{ opacity: 0, letterSpacing: "1em" }}
-                animate={{ opacity: 1, letterSpacing: "0.4em" }}
-                transition={{ delay: 2.5, duration: 1 }}
-                className="mt-4 text-red-500 text-lg md:text-2xl font-bold"
-              >
-                WEBSITES
-              </motion.h2>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 3.2 }}
-                className="mt-6 text-white/50 tracking-[0.4em]"
-              >
-                未来 • PRECISION • DOMINATION
-              </motion.p>
-
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "260px" }}
-                transition={{ delay: 3.7, duration: 1 }}
-                className="mx-auto mt-8 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <nav className="fixed top-5 left-1/2 z-50 flex w-[92%] -translate-x-1/2 items-center justify-between rounded-full border border-white/10 bg-black/40 px-6 py-4 backdrop-blur-2xl">
-        <div className="font-black tracking-[0.25em]">
-          侍 <span className="text-red-500">SAMURAI</span>
-        </div>
-
-        <div className="hidden gap-8 text-sm text-white/70 md:flex">
-          {["About", "Founder", "Services", "Contact"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="transition hover:text-red-400">
-              {item}
-            </a>
-          ))}
-        </div>
-
-        <button onClick={() => setMenu(!menu)} className="md:hidden text-xl">
-          {menu ? <FaTimes /> : <FaBars />}
-        </button>
-      </nav>
-
-      {menu && (
-        <div className="fixed top-24 inset-x-6 z-40 rounded-3xl border border-red-500/20 bg-black/90 p-6 backdrop-blur-xl md:hidden">
-          {["About", "Founder", "Services", "Contact"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="block py-3 text-white/80" onClick={() => setMenu(false)}>
-              {item}
-            </a>
-          ))}
+      {!loaded && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+          <div className="text-center">
+            <div className="text-5xl font-black tracking-[0.4em] text-red-500 animate-pulse">
+              SAMURAI
+            </div>
+            <p className="mt-4 text-gray-400 tracking-widest">
+              Loading digital empire...
+            </p>
+          </div>
         </div>
       )}
 
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(220,38,38,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(220,38,38,0.12)_1px,transparent_1px)] bg-[size:80px_80px] opacity-30" />
-        <div className="absolute left-0 top-20 h-96 w-96 rounded-full bg-red-600/20 blur-[150px]" />
-        <div className="absolute right-0 bottom-20 h-[500px] w-[500px] rounded-full bg-red-700/20 blur-[180px]" />
-
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{ y: [-20, 20, -20], opacity: [0.2, 1, 0.2] }}
-            transition={{ duration: 3 + i * 0.1, repeat: Infinity }}
-            className="absolute h-[2px] w-[2px] rounded-full bg-red-400"
-            style={{ left: `${(i * 37) % 100}%`, top: `${(i * 53) % 100}%` }}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-6xl rounded-full border border-white/10 bg-white/10 backdrop-blur-xl px-6 py-4 flex items-center justify-between shadow-2xl">
+        <div className="flex items-center gap-3">
+          <img
+            src={logo}
+            alt="Samurai Websites Logo"
+            className="w-9 h-9 object-contain"
           />
-        ))}
+          <span className="font-black tracking-[0.35em] text-red-500 text-sm">
+            SAMURAI
+          </span>
+        </div>
 
-        <motion.div style={{ y: heroY }} className="relative z-10 mx-auto max-w-6xl text-center">
-          <motion.p initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="mb-6 text-sm font-bold tracking-[0.5em] text-red-500">
-            NEXT-GEN DIGITAL EXPERIENCES
-          </motion.p>
+        <div className="hidden md:flex gap-8 text-sm text-gray-300">
+          <a href="#about" className="hover:text-red-500 transition">
+            About
+          </a>
+          <a href="#founder" className="hover:text-red-500 transition">
+            Founder
+          </a>
+          <a href="#services" className="hover:text-red-500 transition">
+            Services
+          </a>
+          <a href="#contact" className="hover:text-red-500 transition">
+            Contact
+          </a>
+        </div>
+      </nav>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 80, filter: "blur(20px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1.2 }}
-            className="text-5xl md:text-8xl lg:text-9xl font-black leading-none"
-          >
-            WE FORGE
-            <br />
-            <span className="bg-gradient-to-r from-red-500 via-white to-red-600 bg-clip-text text-transparent">
-              WEBSITES
-            </span>
-            <br />
-            THAT DOMINATE.
-          </motion.h1>
+      <section className="relative min-h-screen flex items-center pt-32 px-6">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+          <div className="space-y-8">
+            <p className="text-red-500 tracking-[0.4em] font-bold text-sm">
+              FUTURISTIC WEB DESIGN
+            </p>
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg md:text-2xl text-white/60">
-            Premium futuristic websites crafted with samurai precision.
+            <h1 className="text-5xl md:text-7xl font-black leading-tight">
+              Build your brand like a{" "}
+              <span className="text-red-500">digital empire.</span>
+            </h1>
+
+            <p className="text-gray-400 text-lg max-w-xl leading-relaxed">
+              Samurai Websites creates premium, cinematic, animated websites
+              with modern UI, sharp branding, and samurai-level precision.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#contact"
+                className="px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-bold shadow-lg shadow-red-600/30"
+              >
+                Start Project
+              </a>
+
+              <a
+                href="#services"
+                className="px-8 py-4 rounded-full border border-white/15 hover:border-red-500 transition font-bold"
+              >
+                View Services
+              </a>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="absolute -inset-6 bg-red-600/20 blur-3xl rounded-full" />
+
+            <div className="relative rounded-[2rem] border border-red-500/30 bg-white/5 backdrop-blur-xl p-6 shadow-2xl">
+              <img
+                src={founder}
+                alt="Founder"
+                className="w-full h-[480px] object-cover rounded-[1.5rem]"
+              />
+
+              <div className="absolute bottom-10 left-10 right-10 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/10 p-5">
+                <p className="text-red-500 font-bold tracking-widest text-sm">
+                  FOUNDER & CEO
+                </p>
+                <h2 className="text-2xl font-black mt-1">
+                  Mithun Krrishnan D
+                </h2>
+                <p className="text-gray-400 text-sm mt-2">
+                  Founder of Samurai Websites, crafting premium digital
+                  experiences with cinematic animations and samurai precision.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="relative px-6 py-24">
+        <div className="max-w-6xl mx-auto rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl p-10 md:p-14">
+          <p className="text-red-500 tracking-[0.35em] font-bold text-sm">
+            ABOUT
           </p>
 
-          <div className="mt-12 flex flex-col items-center justify-center gap-5 sm:flex-row">
-            <a href="#contact">
-              <MagneticButton className="bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.7)] hover:bg-red-500">
-                Start Project <FaArrowRight className="ml-3 inline" />
-              </MagneticButton>
-            </a>
+          <h2 className="text-4xl md:text-5xl font-black mt-4">
+            Samurai Websites
+          </h2>
 
-            <a href="#services">
-              <MagneticButton className="border border-white/10 bg-white/5 hover:border-red-500">
-                Explore More
-              </MagneticButton>
-            </a>
-          </div>
-        </motion.div>
+          <p className="text-gray-400 mt-6 text-lg leading-relaxed max-w-4xl">
+            Mithun Krrishnan D is the Founder & CEO of Samurai Websites, a
+            futuristic web design brand focused on crafting premium digital
+            experiences with modern UI, cinematic animations, and samurai
+            precision.
+          </p>
+        </div>
       </section>
 
-      <Section id="about" title="Built like a blade. Designed like luxury.">
-        <div className="grid gap-6 md:grid-cols-3">
-          {["10X Visual Impact", "100% Responsive", "Elite Brand Feel"].map((item) => (
-            <Card key={item}>
-              <h3 className="text-4xl font-black text-red-500">{item.split(" ")[0]}</h3>
-              <p className="mt-4 text-white/60">{item}</p>
-            </Card>
-          ))}
+      <section id="services" className="relative px-6 py-24">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-red-500 tracking-[0.35em] font-bold text-sm">
+            SERVICES
+          </p>
+
+          <h2 className="text-4xl md:text-5xl font-black mt-4 mb-12">
+            What we build
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "Premium Websites",
+                text: "Modern landing pages, portfolios, business sites, and high-end brand pages.",
+              },
+              {
+                title: "Cinematic UI",
+                text: "Smooth animations, futuristic layouts, luxury visuals, and clean user experience.",
+              },
+              {
+                title: "Business Growth",
+                text: "Websites built to impress clients, collect leads, and make your brand look serious.",
+              },
+            ].map((service, index) => (
+              <div
+                key={index}
+                className="rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:border-red-500/60 hover:-translate-y-2 transition duration-300"
+              >
+                <div className="text-4xl mb-6">⚔️</div>
+                <h3 className="text-2xl font-black">{service.title}</h3>
+                <p className="text-gray-400 mt-4 leading-relaxed">
+                  {service.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </Section>
+      </section>
 
-      <section id="founder" className="relative px-6 py-28 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600/10 blur-[170px]" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 80 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9 }}
-          className="relative mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2"
-        >
-          <div>
-            <p className="mb-5 flex items-center gap-3 text-sm font-bold tracking-[0.5em] text-red-500">
-              <FaCrown /> FOUNDER PROFILE
+      <section id="contact" className="relative px-6 py-24">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-stretch">
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl p-8 md:p-10 shadow-2xl"
+          >
+            <p className="text-red-500 tracking-[0.35em] font-bold text-sm">
+              CONTACT
             </p>
 
-            <h2 className="text-5xl font-black leading-tight md:text-7xl">
-              The mind behind the blade.
+            <h2 className="text-4xl font-black mt-4 mb-8">
+              Start your project
             </h2>
 
-            <p className="mt-8 text-xl leading-relaxed text-white/65">
-              Mithun Krrishnan D is the Founder & CEO of Samurai Websites, a
-              futuristic web design brand focused on crafting premium digital
-              experiences with modern UI, cinematic animations, and samurai
-              precision.
-            </p>
+            <div className="space-y-4">
+              <input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Your name"
+                className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none"
+              />
 
-            <div className="mt-8 rounded-3xl border border-red-500/20 bg-white/[0.04] p-6 backdrop-blur-xl">
-              <p className="text-red-400 font-bold">Mithun Krrishnan D</p>
-              <p className="mt-2 text-white/50">Founder & CEO • Samurai Websites</p>
+              <input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="Your email"
+                className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none"
+              />
+
+              <input
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Phone number"
+                className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none"
+              />
+
+              <input
+                name="budget"
+                value={formData.budget}
+                onChange={handleChange}
+                placeholder="Budget"
+                className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none"
+              />
+
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                placeholder="Tell us what website you want..."
+                rows="5"
+                className="w-full rounded-2xl bg-black border border-white/10 text-white px-5 py-4 outline-none resize-none"
+              />
+
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black shadow-lg shadow-red-600/30 disabled:opacity-60"
+              >
+                {sending ? "Sending..." : "Send Message"}
+              </button>
             </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 120, rotate: 6, filter: "blur(20px)" }}
-            whileInView={{ opacity: 1, x: 0, rotate: 0, filter: "blur(0px)" }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="relative mx-auto w-full max-w-md"
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute -inset-8 rounded-full border border-red-500/20"
-            />
-
-            <motion.div
-              animate={{ y: [0, -18, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="relative overflow-hidden rounded-[3rem] border border-red-500/30 bg-gradient-to-b from-red-500/10 to-black p-3 shadow-[0_0_100px_rgba(220,38,38,0.25)]"
-            >
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,0,0,0.18),transparent)] animate-pulse" />
-
-              <img
-                src={founderPhoto}
-                alt="Mithun Krrishnan D Founder of Samurai Websites"
-                className="relative z-10 h-[560px] w-full rounded-[2.5rem] object-cover object-top contrast-110 saturate-125"
-              />
-
-              <motion.div
-                animate={{ y: ["-100%", "120%"] }}
-                transition={{ duration: 2.6, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 top-0 z-20 h-24 w-full bg-gradient-to-b from-transparent via-red-500/30 to-transparent"
-              />
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      <Section id="services" title="Services forged for modern brands.">
-        <div className="grid gap-6 md:grid-cols-3">
-          {services.map(([name, Icon]) => (
-            <Card key={name} hover>
-              <Icon className="mb-6 text-4xl text-red-500" />
-              <h3 className="text-2xl font-black">{name}</h3>
-              <p className="mt-4 text-white/55">
-                Premium strategy, futuristic UI, cinematic motion, and elite execution.
-              </p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Why clients choose the blade.">
-        <div className="grid gap-5 md:grid-cols-5">
-          {why.map(([name, Icon]) => (
-            <Card key={name}>
-              <Icon className="mx-auto mb-4 text-3xl text-red-500" />
-              <p className="text-center font-bold">{name}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="What people say.">
-        <div className="mx-auto max-w-3xl rounded-[2rem] border border-red-500/20 bg-white/[0.04] p-10 text-center shadow-[0_0_80px_rgba(220,38,38,0.12)]">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={testimonial}
-              initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-              className="text-2xl font-bold text-white/80"
-            >
-              “{testimonials[testimonial]}”
-            </motion.p>
-          </AnimatePresence>
-        </div>
-      </Section>
-
-      <Section id="contact" title="Let’s forge your digital empire.">
-        <div className="grid gap-8 md:grid-cols-2">
-          <form onSubmit={handleContactSubmit} className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            <input name="name" placeholder="Name" className="mb-4 w-full rounded-2xl border border-white/10 bg-black/60 px-5 py-4 outline-none transition focus:border-red-500" />
-            <input name="email" type="email" placeholder="Email" className="mb-4 w-full rounded-2xl border border-white/10 bg-black/60 px-5 py-4 outline-none transition focus:border-red-500" />
-            <input name="phone" type="tel" placeholder="Phone / WhatsApp Number" className="mb-4 w-full rounded-2xl border border-white/10 bg-black/60 px-5 py-4 outline-none transition focus:border-red-500" />
-            <input name="budget" placeholder="Project Budget" className="mb-4 w-full rounded-2xl border border-white/10 bg-black/60 px-5 py-4 outline-none transition focus:border-red-500" />
-            <textarea name="message" placeholder="Tell us about your project..." rows="5" className="mb-4 w-full rounded-2xl border border-white/10 bg-black/60 px-5 py-4 outline-none transition focus:border-red-500" />
-
-            <button type="submit" disabled={sending} className="w-full rounded-full bg-red-600 px-7 py-4 font-bold shadow-[0_0_40px_rgba(220,38,38,0.5)] transition hover:bg-red-500 disabled:opacity-60">
-              {sending ? "Sending..." : "Send Message"}
-            </button>
           </form>
 
-          <div className="flex flex-col justify-center rounded-[2rem] border border-red-500/20 bg-red-600/5 p-8">
-            <h3 className="text-4xl font-black">SAMURAI WEBSITES</h3>
+          <div className="rounded-[2rem] border border-red-500/30 bg-red-950/20 backdrop-blur-xl p-8 md:p-10 flex flex-col justify-center">
+            <h2 className="text-4xl font-black">SAMURAI WEBSITES</h2>
 
-            <p className="mt-5 text-white/60">
-              Dark luxury websites, animated interfaces, and futuristic digital experiences.
+            <p className="text-gray-400 mt-5 leading-relaxed">
+              Dark luxury websites, animated interfaces, and futuristic digital
+              experiences.
             </p>
 
-            <div className="mt-8 flex gap-5 text-3xl text-red-500">
-              <a href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noreferrer">
-                <FaDiscord className="transition hover:scale-125 hover:text-white" />
-              </a>
-
-              <a href="https://instagram.com/YOUR_USERNAME" target="_blank" rel="noreferrer">
-                <FaInstagram className="transition hover:scale-125 hover:text-white" />
-              </a>
-
-              <a href="mailto:samurai.websites.dev@gmail.com">
-                <FaEnvelope className="transition hover:scale-125 hover:text-white" />
-              </a>
+            <div className="flex gap-5 text-3xl mt-8 text-red-500">
+              <span>🎮</span>
+              <span>📸</span>
+              <span>✉️</span>
             </div>
 
-            <p className="mt-8 text-sm text-white/40">
-              Fill the form and your message will go straight to the Samurai Websites inbox.
+            <p className="text-gray-500 mt-8">
+              Fill the form and your message will go straight to the Samurai
+              Websites backend.
             </p>
           </div>
         </div>
-      </Section>
+      </section>
 
-      <footer className="border-t border-white/10 px-6 py-12 text-center">
-        <div className="text-3xl font-black tracking-[0.3em]">
-          侍 SAMURAI <span className="text-red-500">WEBSITES</span>
-        </div>
-
-        <div className="mx-auto my-6 h-px max-w-4xl bg-gradient-to-r from-transparent via-red-500 to-transparent" />
-
-        <p className="text-white/40">© 2026 Samurai Websites. Built to dominate.</p>
+      <footer className="relative px-6 py-10 border-t border-white/10 text-center text-gray-500">
+        © 2026 Samurai Websites. Built with precision.
       </footer>
     </div>
   );
 }
-
-function Section({ id, title, children }) {
-  return (
-    <section id={id} className="relative px-6 py-28">
-      <motion.div
-        initial={{ opacity: 0, y: 70 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.9 }}
-        className="mx-auto max-w-7xl"
-      >
-        <h2 className="mb-14 max-w-4xl text-4xl md:text-6xl font-black leading-tight">
-          {title}
-        </h2>
-        {children}
-      </motion.div>
-    </section>
-  );
-}
-
-function Card({ children, hover }) {
-  return (
-    <motion.div
-      whileHover={hover ? { y: -12, scale: 1.03 } : { y: -6 }}
-      className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl transition hover:border-red-500/60 hover:shadow-[0_0_60px_rgba(220,38,38,0.18)]"
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-export default App;
