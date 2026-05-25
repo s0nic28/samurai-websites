@@ -7,38 +7,94 @@
 }
 
 html {
+  scroll-behavior: smooth;
   background: #000;
-  scroll-behavior: auto;
 }
 
 body {
   margin: 0;
   background: #000;
   color: white;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   overflow-x: hidden;
+}
+
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
 }
 
 ::selection {
   background: #dc2626;
   color: white;
-}/* =========================
-   EMERGENCY MOBILE SPEED MODE
-   Keeps desktop cinematic.
-   Makes phone smooth.
-========================= */
+}
 
-@media (max-width: 768px) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.12s !important;
-    scroll-behavior: auto !important;
+@keyframes mobileGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
   }
 
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes desktopFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes desktopShine {
+  0% {
+    transform: translateX(-130%);
+  }
+
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+.mobile-soft-glow {
+  animation: mobileGlow 4s ease-in-out infinite;
+}
+
+.desktop-float {
+  animation: desktopFloat 4s ease-in-out infinite;
+}
+
+.desktop-shine {
+  animation: desktopShine 3.5s ease-in-out infinite;
+}
+
+/* =========================
+   MOBILE SPEED MODE
+   This keeps phones smooth.
+========================= */
+
+@media (max-width: 767px) {
   html,
   body {
     overflow-x: hidden !important;
     background: #000 !important;
+    scroll-behavior: auto !important;
   }
 
   body {
@@ -46,7 +102,33 @@ body {
     text-rendering: optimizeSpeed;
   }
 
-  /* Kill mobile lag from blur/glass */
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: 650px;
+  }
+
+  nav,
+  .mobile-card {
+    transform: translateZ(0);
+  }
+
+  .mobile-card {
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-red-card {
+    background: rgba(127, 29, 29, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .mobile-button {
+    background: #dc2626;
+    color: white;
+    border-radius: 999px;
+    font-weight: 900;
+  }
+
   .backdrop-blur-xl,
   .backdrop-blur-2xl,
   .backdrop-blur-lg,
@@ -56,33 +138,13 @@ body {
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Reduce huge glow/shadow GPU cost */
-  [class*="shadow-"] {
-    box-shadow: none !important;
-  }
-
-  [class*="blur-"] {
-    filter: none !important;
-  }
-
+  [class*="shadow-"],
+  [class*="blur-"],
   [class*="drop-shadow"] {
+    box-shadow: none !important;
     filter: none !important;
   }
 
-  /* Make sections render only when needed */
-  section {
-    content-visibility: auto;
-    contain-intrinsic-size: 700px;
-  }
-
-  /* Keep nav fast */
-  nav {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: rgba(0, 0, 0, 0.92) !important;
-  }
-
-  /* Prevent expensive scaling/focus animations */
   input,
   textarea,
   button,
@@ -90,83 +152,36 @@ body {
     transform: none !important;
   }
 
-  /* Founder image smooth */
   img {
     max-width: 100%;
     height: auto;
   }
-}/* =========================
-   EMERGENCY MOBILE SPEED MODE
-   Keeps desktop cinematic.
-   Makes phone smooth.
+}
+
+/* =========================
+   DESKTOP POLISH
 ========================= */
 
-@media (max-width: 768px) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.12s !important;
-    scroll-behavior: auto !important;
+@media (min-width: 768px) {
+  .glass {
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  html,
-  body {
-    overflow-x: hidden !important;
-    background: #000 !important;
+  .red-glow {
+    box-shadow: 0 0 55px rgba(239, 68, 68, 0.28);
   }
 
-  body {
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeSpeed;
+  .premium-card {
+    transition: transform 0.28s ease, border-color 0.28s ease,
+      background 0.28s ease;
   }
 
-  /* Kill mobile lag from blur/glass */
-  .backdrop-blur-xl,
-  .backdrop-blur-2xl,
-  .backdrop-blur-lg,
-  .backdrop-blur-md,
-  .backdrop-blur-sm {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  /* Reduce huge glow/shadow GPU cost */
-  [class*="shadow-"] {
-    box-shadow: none !important;
-  }
-
-  [class*="blur-"] {
-    filter: none !important;
-  }
-
-  [class*="drop-shadow"] {
-    filter: none !important;
-  }
-
-  /* Make sections render only when needed */
-  section {
-    content-visibility: auto;
-    contain-intrinsic-size: 700px;
-  }
-
-  /* Keep nav fast */
-  nav {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: rgba(0, 0, 0, 0.92) !important;
-  }
-
-  /* Prevent expensive scaling/focus animations */
-  input,
-  textarea,
-  button,
-  a {
-    transform: none !important;
-  }
-
-  /* Founder image smooth */
-  img {
-    max-width: 100%;
-    height: auto;
+  .premium-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(239, 68, 68, 0.55);
+    background: rgba(255, 255, 255, 0.06);
   }
 }
