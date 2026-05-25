@@ -99,7 +99,7 @@ function useContactForm() {
   };
 }
 
-/* ================= MOBILE UI: FAST, CLEAN, NO LAG ================= */
+/* ================= MOBILE UI: ULTRA SMOOTH ================= */
 
 function MobileUI() {
   const { formData, sending, sent, handleChange, handleSubmit } =
@@ -108,12 +108,18 @@ function MobileUI() {
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden selection:bg-red-600 selection:text-white">
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.22),transparent_35%),linear-gradient(to_bottom,#000,rgba(25,0,0,0.82),#000)]" />
+        <div className="absolute inset-0 bg-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.2),transparent_38%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/80 to-black" />
       </div>
 
       <nav className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[94%] rounded-full border border-red-500/20 bg-black px-4 py-3 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2">
-          <img src={logo} alt="Samurai logo" className="w-8 h-8 object-contain" />
+          <img
+            src={logo}
+            alt="Samurai logo"
+            className="w-8 h-8 object-contain"
+          />
           <span className="text-red-500 text-xs font-black tracking-[0.2em]">
             SAMURAI
           </span>
@@ -169,7 +175,7 @@ function MobileUI() {
                 <div>
                   <p className="font-black">Fast mobile UI</p>
                   <p className="text-sm text-gray-500">
-                    Smooth on every phone.
+                    Clean, stable, and smooth.
                   </p>
                 </div>
               </div>
@@ -407,7 +413,7 @@ function MobileUI() {
   );
 }
 
-/* ================= DESKTOP UI: CINEMATIC VERSION ================= */
+/* ================= DESKTOP UI: CINEMATIC BUT NO LEFT-RIGHT LINES ================= */
 
 function DesktopUI() {
   const [loaded, setLoaded] = useState(false);
@@ -415,54 +421,43 @@ function DesktopUI() {
     useContactForm();
 
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -260]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -240]);
 
   const sparks = useMemo(
     () =>
-      Array.from({ length: 48 }, (_, i) => ({
+      Array.from({ length: 32 }, (_, i) => ({
         id: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
         delay: Math.random() * 4,
-        duration: 3 + Math.random() * 5,
+        duration: 4 + Math.random() * 5,
         size: 2 + Math.random() * 4,
-      })),
-    []
-  );
-
-  const slashLines = useMemo(
-    () =>
-      Array.from({ length: 14 }, (_, i) => ({
-        id: i,
-        top: `${8 + i * 6}%`,
-        delay: i * 0.18,
-        width: 100 + Math.random() * 210,
       })),
     []
   );
 
   const orbitDots = useMemo(
     () =>
-      Array.from({ length: 18 }, (_, i) => ({
+      Array.from({ length: 14 }, (_, i) => ({
         id: i,
-        rotate: i * 20,
+        rotate: i * 25.7,
         delay: i * 0.08,
       })),
     []
   );
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1300);
+    const timer = setTimeout(() => setLoaded(true), 1200);
     return () => clearTimeout(timer);
   }, []);
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 45, filter: "blur(8px)" },
+    hidden: { opacity: 0, y: 42, filter: "blur(7px)" },
     visible: {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.75, ease: "easeOut" },
+      transition: { duration: 0.7, ease: "easeOut" },
     },
   };
 
@@ -470,7 +465,7 @@ function DesktopUI() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.09,
       },
     },
   };
@@ -482,28 +477,27 @@ function DesktopUI() {
           <motion.div
             className="fixed inset-0 z-[999] flex items-center justify-center bg-black px-4"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.08, filter: "blur(16px)" }}
-            transition={{ duration: 0.75, ease: "easeInOut" }}
+            exit={{ opacity: 0, scale: 1.04 }}
+            transition={{ duration: 0.55, ease: "easeInOut" }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.42),transparent_34%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.35),transparent_38%)]" />
 
             <motion.div
-              initial={{ scale: 0.65, opacity: 0, rotate: -12 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ duration: 0.9, ease: "easeOut" }}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="relative text-center"
             >
               <motion.img
                 src={logo}
                 alt="Samurai Logo"
-                className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_45px_rgba(239,68,68,1)]"
+                className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
                 animate={{
-                  y: [0, -14, 0],
-                  rotate: [0, 4, -4, 0],
-                  scale: [1, 1.08, 1],
+                  y: [0, -12, 0],
+                  scale: [1, 1.06, 1],
                 }}
                 transition={{
-                  duration: 2,
+                  duration: 2.4,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
@@ -514,10 +508,10 @@ function DesktopUI() {
               </h1>
 
               <motion.div
-                className="mt-6 h-1 w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full shadow-[0_0_30px_rgba(239,68,68,1)]"
+                className="mt-6 h-1 w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 1.1, delay: 0.4 }}
+                transition={{ duration: 1, delay: 0.25 }}
               />
 
               <p className="mt-5 text-gray-300 tracking-[0.28em] text-sm">
@@ -529,12 +523,10 @@ function DesktopUI() {
       </AnimatePresence>
 
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.32),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.34),transparent_36%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.3),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.32),transparent_38%)]" />
 
-        <motion.div
-          className="absolute inset-0 opacity-20"
-          animate={{ backgroundPosition: ["0px 0px", "100px 100px"] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+        <div
+          className="absolute inset-0 opacity-15"
           style={{
             backgroundImage:
               "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
@@ -542,12 +534,12 @@ function DesktopUI() {
           }}
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.9))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.92))]" />
 
         {sparks.map((spark) => (
           <motion.span
             key={spark.id}
-            className="absolute rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]"
+            className="absolute rounded-full bg-red-500"
             style={{
               left: spark.left,
               top: spark.top,
@@ -555,9 +547,9 @@ function DesktopUI() {
               height: spark.size,
             }}
             animate={{
-              y: [0, -120, 0],
-              opacity: [0, 1, 0],
-              scale: [0.4, 1.4, 0.4],
+              y: [0, -110, 0],
+              opacity: [0, 0.8, 0],
+              scale: [0.5, 1.2, 0.5],
             }}
             transition={{
               duration: spark.duration,
@@ -568,53 +560,30 @@ function DesktopUI() {
           />
         ))}
 
-        {slashLines.map((line) => (
-          <motion.div
-            key={line.id}
-            className="absolute h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent rotate-[-18deg]"
-            style={{
-              top: line.top,
-              left: "-30%",
-              width: line.width,
-            }}
-            animate={{
-              x: ["0vw", "160vw"],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              delay: line.delay,
-              repeatDelay: 3,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
         <motion.div
-          className="absolute -top-44 -right-44 w-[620px] h-[620px] rounded-full bg-red-600/24 blur-[140px]"
-          animate={{ scale: [1, 1.28, 1], opacity: [0.35, 0.8, 0.35] }}
-          transition={{ duration: 6, repeat: Infinity }}
+          className="absolute -top-44 -right-44 w-[580px] h-[580px] rounded-full bg-red-600/20 blur-[120px]"
+          animate={{ scale: [1, 1.16, 1], opacity: [0.35, 0.7, 0.35] }}
+          transition={{ duration: 7, repeat: Infinity }}
         />
 
         <motion.div
-          className="absolute bottom-0 -left-44 w-[520px] h-[520px] rounded-full bg-red-900/35 blur-[140px]"
-          animate={{ scale: [1.18, 1, 1.18], opacity: [0.3, 0.72, 0.3] }}
-          transition={{ duration: 7, repeat: Infinity }}
+          className="absolute bottom-0 -left-44 w-[480px] h-[480px] rounded-full bg-red-900/28 blur-[120px]"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.28, 0.6, 0.28] }}
+          transition={{ duration: 8, repeat: Infinity }}
         />
       </div>
 
       <motion.nav
         initial={{ y: -90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/65 backdrop-blur-2xl px-7 py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
+        transition={{ delay: 1.2, duration: 0.7, ease: "easeOut" }}
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/70 backdrop-blur-xl px-7 py-4 flex items-center justify-between"
       >
         <a href="#" className="flex items-center gap-3">
           <img
             src={logo}
             alt="Samurai Websites Logo"
-            className="w-10 h-10 object-contain drop-shadow-[0_0_18px_rgba(239,68,68,0.9)]"
+            className="w-10 h-10 object-contain"
           />
           <span className="font-black tracking-[0.35em] text-red-500 text-sm">
             SAMURAI
@@ -629,14 +598,14 @@ function DesktopUI() {
               className="hover:text-red-500 transition relative group"
             >
               {item}
-              <span className="absolute left-0 -bottom-2 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-300 shadow-[0_0_12px_rgba(239,68,68,1)]" />
+              <span className="absolute left-0 -bottom-2 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-300" />
             </a>
           ))}
         </div>
 
         <a
           href="#contact"
-          className="flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-sm font-black hover:bg-red-700 transition shadow-lg shadow-red-600/30"
+          className="flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-sm font-black hover:bg-red-700 transition"
         >
           Start <FaArrowRight />
         </a>
@@ -670,20 +639,10 @@ function DesktopUI() {
                 className="text-7xl xl:text-8xl font-black leading-[0.92]"
               >
                 Samurai Websites{" "}
-                <motion.span
-                  className="relative inline-block text-red-500 drop-shadow-[0_0_34px_rgba(239,68,68,0.7)]"
-                  animate={{
-                    textShadow: [
-                      "0 0 18px rgba(239,68,68,0.5)",
-                      "0 0 38px rgba(239,68,68,1)",
-                      "0 0 18px rgba(239,68,68,0.5)",
-                    ],
-                  }}
-                  transition={{ duration: 2.2, repeat: Infinity }}
-                >
+                <span className="relative inline-block text-red-500">
                   builds premium.
                   <span className="absolute left-0 -bottom-2 w-full h-2 bg-red-600/40 blur-md" />
-                </motion.span>
+                </span>
               </motion.h1>
 
               <motion.p
@@ -697,17 +656,17 @@ function DesktopUI() {
 
               <motion.div variants={fadeUp} className="flex gap-4">
                 <motion.a
-                  whileHover={{ scale: 1.07, y: -4 }}
+                  whileHover={{ scale: 1.06, y: -4 }}
                   whileTap={{ scale: 0.96 }}
                   href="#contact"
-                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] flex items-center justify-center gap-3"
+                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black flex items-center justify-center gap-3"
                 >
                   Build My Website
                   <FaRocket />
                 </motion.a>
 
                 <motion.a
-                  whileHover={{ scale: 1.07, y: -4 }}
+                  whileHover={{ scale: 1.06, y: -4 }}
                   whileTap={{ scale: 0.96 }}
                   href="#services"
                   className="px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:border-red-500 hover:bg-red-500/10 transition font-bold"
@@ -720,24 +679,14 @@ function DesktopUI() {
                 variants={fadeUp}
                 className="relative max-w-xl rounded-[2rem] border border-red-500/20 bg-black/40 p-4 overflow-hidden"
               >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/15 to-transparent"
-                  animate={{ x: ["-120%", "120%"] }}
-                  transition={{
-                    duration: 2.4,
-                    repeat: Infinity,
-                    repeatDelay: 1.8,
-                  }}
-                />
-
                 <div className="relative flex items-center gap-4">
                   <motion.div
-                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center shadow-[0_0_28px_rgba(239,68,68,0.8)]"
+                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center"
                     animate={{
-                      rotate: [0, 8, -8, 0],
-                      scale: [1, 1.08, 1],
+                      rotate: [0, 6, -6, 0],
+                      scale: [1, 1.06, 1],
                     }}
-                    transition={{ duration: 2.2, repeat: Infinity }}
+                    transition={{ duration: 2.4, repeat: Infinity }}
                   >
                     ⚔️
                   </motion.div>
@@ -755,53 +704,43 @@ function DesktopUI() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, rotate: 4 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 1.7, duration: 1, ease: "easeOut" }}
+              transition={{ delay: 1.45, duration: 0.85, ease: "easeOut" }}
               className="relative min-h-[620px] flex items-center justify-center"
             >
               <motion.div
-                className="absolute -inset-10 bg-red-600/25 blur-3xl rounded-full"
-                animate={{ scale: [1, 1.16, 1], opacity: [0.45, 0.85, 0.45] }}
-                transition={{ duration: 4, repeat: Infinity }}
+                className="absolute -inset-10 bg-red-600/22 blur-3xl rounded-full"
+                animate={{ scale: [1, 1.12, 1], opacity: [0.4, 0.75, 0.4] }}
+                transition={{ duration: 5, repeat: Infinity }}
               />
 
               <motion.div
-                animate={{ y: [0, -14, 0] }}
+                animate={{ y: [0, -12, 0] }}
                 transition={{
-                  duration: 4.2,
+                  duration: 4.5,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="relative w-full max-w-[620px] h-[560px] rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
+                className="relative w-full max-w-[620px] h-[560px] rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl overflow-hidden flex items-center justify-center"
               >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20 pointer-events-none"
-                  animate={{ x: ["-140%", "140%"] }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    repeatDelay: 2,
-                  }}
-                />
-
                 <motion.div
                   className="absolute inset-8 rounded-[2.2rem] border border-red-500/25"
                   animate={{
                     boxShadow: [
-                      "0 0 25px rgba(239,68,68,0.25)",
-                      "0 0 70px rgba(239,68,68,0.55)",
-                      "0 0 25px rgba(239,68,68,0.25)",
+                      "0 0 22px rgba(239,68,68,0.2)",
+                      "0 0 54px rgba(239,68,68,0.45)",
+                      "0 0 22px rgba(239,68,68,0.2)",
                     ],
                   }}
-                  transition={{ duration: 2.8, repeat: Infinity }}
+                  transition={{ duration: 3, repeat: Infinity }}
                 />
 
                 <motion.div
-                  className="absolute w-[390px] h-[390px] rounded-full border border-red-500/30"
+                  className="absolute w-[390px] h-[390px] rounded-full border border-red-500/25"
                   animate={{ rotate: 360 }}
                   transition={{
-                    duration: 18,
+                    duration: 24,
                     repeat: Infinity,
                     ease: "linear",
                   }}
@@ -811,7 +750,7 @@ function DesktopUI() {
                   className="absolute w-[490px] h-[490px] rounded-full border border-white/10"
                   animate={{ rotate: -360 }}
                   transition={{
-                    duration: 28,
+                    duration: 36,
                     repeat: Infinity,
                     ease: "linear",
                   }}
@@ -824,44 +763,43 @@ function DesktopUI() {
                     style={{ rotate: dot.rotate }}
                     animate={{ rotate: dot.rotate + 360 }}
                     transition={{
-                      duration: 22,
+                      duration: 28,
                       repeat: Infinity,
                       ease: "linear",
                       delay: dot.delay,
                     }}
                   >
-                    <span className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]" />
+                    <span className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-red-500" />
                   </motion.div>
                 ))}
 
                 <motion.div
                   className="relative z-30 text-center px-8"
-                  initial={{ scale: 0.85, opacity: 0 }}
+                  initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 2, duration: 0.8 }}
+                  transition={{ delay: 1.75, duration: 0.75 }}
                 >
                   <motion.img
                     src={logo}
                     alt="Samurai Websites Brand Logo"
-                    className="w-32 h-32 object-contain mx-auto mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
+                    className="w-32 h-32 object-contain mx-auto mb-8"
                     animate={{
-                      y: [0, -14, 0],
-                      rotate: [0, 3, -3, 0],
-                      scale: [1, 1.08, 1],
+                      y: [0, -12, 0],
+                      scale: [1, 1.06, 1],
                     }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    transition={{ duration: 3.2, repeat: Infinity }}
                   />
 
                   <motion.h2
                     className="text-6xl font-black tracking-tight"
                     animate={{
                       textShadow: [
-                        "0 0 18px rgba(255,255,255,0.15)",
-                        "0 0 32px rgba(239,68,68,0.55)",
-                        "0 0 18px rgba(255,255,255,0.15)",
+                        "0 0 14px rgba(255,255,255,0.12)",
+                        "0 0 28px rgba(239,68,68,0.45)",
+                        "0 0 14px rgba(255,255,255,0.12)",
                       ],
                     }}
-                    transition={{ duration: 2.4, repeat: Infinity }}
+                    transition={{ duration: 2.8, repeat: Infinity }}
                   >
                     SAMURAI
                     <span className="block text-red-500">WEBSITES</span>
@@ -893,8 +831,6 @@ function DesktopUI() {
     </div>
   );
 }
-
-/* ================= SHARED DESKTOP SECTIONS ================= */
 
 function SharedSections({
   formData,
@@ -983,7 +919,7 @@ function SharedSections({
           >
             <div className="absolute -inset-4 bg-red-600/18 blur-3xl rounded-full" />
 
-            <div className="relative w-full h-[500px] sm:h-[540px] rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 shadow-[0_0_70px_rgba(239,68,68,0.18)] overflow-hidden bg-black/70 flex items-center justify-center p-3">
+            <div className="relative w-full h-[500px] sm:h-[540px] rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 overflow-hidden bg-black/70 flex items-center justify-center p-3">
               <img
                 src={founder}
                 alt="Founder"
@@ -1087,8 +1023,6 @@ function SharedSections({
                 }}
                 className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-7 sm:p-8 hover:border-red-500/50 transition duration-300 relative overflow-hidden text-center sm:text-left"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 via-red-600/0 to-red-600/18 opacity-0 group-hover:opacity-100 transition duration-300" />
-
                 <div className="relative text-4xl mb-6 text-red-500 flex justify-center sm:block">
                   {service.icon}
                 </div>
@@ -1123,7 +1057,7 @@ function SharedSections({
                   whileHover={{ scale: 1.035, y: -5 }}
                   className="rounded-3xl bg-black/35 border border-white/10 p-6 flex items-center gap-4"
                 >
-                  <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_22px_rgba(239,68,68,0.75)] shrink-0">
+                  <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shrink-0">
                     <FaCheck />
                   </span>
                   <p className="font-black">{item}</p>
@@ -1142,7 +1076,7 @@ function SharedSections({
             whileInView={{ opacity: 1, x: 0, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7 }}
-            className={`${cardRadius} border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden`}
+            className={`${cardRadius} border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-10 relative overflow-hidden`}
           >
             <p className="relative text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
               CONTACT
@@ -1167,7 +1101,7 @@ function SharedSections({
                   onChange={handleChange}
                   required={name === "name" || name === "email"}
                   placeholder={placeholder}
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/35 transition text-sm sm:text-base focus:scale-[1.005]"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/35 transition text-sm sm:text-base"
                 />
               ))}
 
@@ -1178,7 +1112,7 @@ function SharedSections({
                 required
                 placeholder="Tell us what website you want..."
                 rows="5"
-                className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base focus:scale-[1.005]"
+                className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base"
               />
 
               <motion.button
@@ -1186,7 +1120,7 @@ function SharedSections({
                 whileTap={{ scale: 0.96 }}
                 type="submit"
                 disabled={sending}
-                className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black shadow-[0_0_36px_rgba(239,68,68,0.5)] disabled:opacity-60 flex items-center justify-center gap-3"
+                className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black disabled:opacity-60 flex items-center justify-center gap-3"
               >
                 {sending ? (
                   <>
@@ -1257,7 +1191,7 @@ function SharedSections({
                     key={item}
                     className="flex items-center gap-3 text-gray-300"
                   >
-                    <span className="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_14px_rgba(239,68,68,1)] shrink-0" />
+                    <span className="w-2 h-2 bg-red-500 rounded-full shrink-0" />
                     {item}
                   </div>
                 ))}
