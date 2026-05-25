@@ -26,11 +26,10 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -260]);
-  const glowScale = useTransform(scrollYProgress, [0, 0.45], [1, 1.28]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -180]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -40,54 +39,58 @@ export default function App() {
     message: "",
   });
 
-  const sparks = useMemo(
+  const desktopParticles = useMemo(
     () =>
-      Array.from({ length: 48 }, (_, i) => ({
+      Array.from({ length: 32 }, (_, i) => ({
         id: i,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
         delay: Math.random() * 4,
-        duration: 3 + Math.random() * 5,
+        duration: 4 + Math.random() * 4,
         size: 2 + Math.random() * 4,
       })),
     []
   );
 
-  const orbitDots = useMemo(
+  const mobileParticles = useMemo(
     () =>
-      Array.from({ length: 18 }, (_, i) => ({
+      Array.from({ length: 10 }, (_, i) => ({
         id: i,
-        rotate: i * 20,
-        delay: i * 0.08,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        delay: Math.random() * 4,
+        duration: 5 + Math.random() * 4,
+        size: 2 + Math.random() * 3,
       })),
     []
   );
 
   const slashLines = useMemo(
     () =>
-      Array.from({ length: 14 }, (_, i) => ({
+      Array.from({ length: 7 }, (_, i) => ({
         id: i,
-        top: `${8 + i * 6}%`,
-        delay: i * 0.18,
-        width: 100 + Math.random() * 210,
+        top: `${12 + i * 12}%`,
+        delay: i * 0.35,
+        width: 120 + Math.random() * 170,
       })),
     []
   );
 
-  const floatingWords = ["PREMIUM", "CINEMATIC", "SAMURAI", "MODERN", "BRAND"];
+  const particles = isMobile ? mobileParticles : desktopParticles;
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 1400);
+    const timer = setTimeout(() => setLoaded(true), 1100);
 
-    const move = (e) => {
-      setCursor({ x: e.clientX, y: e.clientY });
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener("mousemove", move);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("mousemove", move);
+      window.removeEventListener("resize", checkMobile);
     };
   }, []);
 
@@ -137,12 +140,11 @@ export default function App() {
   };
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 45, filter: "blur(8px)" },
+    hidden: { opacity: 0, y: 34 },
     visible: {
       opacity: 1,
       y: 0,
-      filter: "blur(0px)",
-      transition: { duration: 0.75, ease: "easeOut" },
+      transition: { duration: 0.65, ease: "easeOut" },
     },
   };
 
@@ -150,10 +152,46 @@ export default function App() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
       },
     },
   };
+
+  const premiumCards = [
+    {
+      icon: <FaCrown />,
+      title: "Premium Look",
+      text: "Luxury layouts that instantly make brands feel more valuable.",
+    },
+    {
+      icon: <FaBolt />,
+      title: "Smooth Motion",
+      text: "Cinematic animations that feel clean, not laggy.",
+    },
+    {
+      icon: <FaShieldAlt />,
+      title: "Trust Builder",
+      text: "Professional sections that make clients ready to contact you.",
+    },
+  ];
+
+  const services = [
+    {
+      icon: <FaLaptopCode />,
+      title: "Premium Websites",
+      text: "Modern landing pages, portfolios, business sites, and high-end brand pages.",
+    },
+    {
+      icon: <FaStar />,
+      title: "Cinematic UI",
+      text: "Luxury visuals, smooth motion, and clean user experience.",
+    },
+    {
+      icon: <FaCode />,
+      title: "Lead Forms",
+      text: "Contact forms connected to backend email so every message reaches you.",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden selection:bg-red-600 selection:text-white">
@@ -162,201 +200,153 @@ export default function App() {
           <motion.div
             className="fixed inset-0 z-[999] flex items-center justify-center bg-black px-4"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.08, filter: "blur(16px)" }}
-            transition={{ duration: 0.75, ease: "easeInOut" }}
+            exit={{ opacity: 0, scale: 1.04 }}
+            transition={{ duration: 0.55, ease: "easeInOut" }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.42),transparent_34%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.35),transparent_42%)]" />
 
             <motion.div
-              className="absolute inset-0 opacity-25"
-              animate={{ backgroundPosition: ["0px 0px", "120px 120px"] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)",
-                backgroundSize: "60px 60px",
-              }}
-            />
-
-            <motion.div
-              initial={{ scale: 0.65, opacity: 0, rotate: -12 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ duration: 0.9, ease: "easeOut" }}
+              initial={{ scale: 0.82, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
               className="relative text-center"
             >
               <motion.img
                 src={logo}
                 alt="Samurai Logo"
-                className="w-24 h-24 sm:w-32 sm:h-32 object-contain mx-auto mb-6 sm:mb-8 drop-shadow-[0_0_45px_rgba(239,68,68,1)]"
+                className="w-24 h-24 sm:w-32 sm:h-32 object-contain mx-auto mb-6 drop-shadow-[0_0_35px_rgba(239,68,68,0.9)]"
                 animate={{
-                  y: [0, -14, 0],
-                  rotate: [0, 4, -4, 0],
-                  scale: [1, 1.08, 1],
+                  y: [0, -10, 0],
+                  scale: [1, 1.06, 1],
                 }}
                 transition={{
-                  duration: 2,
+                  duration: 2.2,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
               />
 
               <motion.h1
-                className="text-3xl sm:text-4xl md:text-7xl font-black tracking-[0.18em] sm:tracking-[0.35em] text-red-500"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+                className="text-3xl sm:text-5xl md:text-7xl font-black tracking-[0.16em] sm:tracking-[0.32em] text-red-500"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65 }}
               >
                 SAMURAI
               </motion.h1>
 
               <motion.div
-                className="mt-6 h-1 w-56 sm:w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full shadow-[0_0_30px_rgba(239,68,68,1)]"
+                className="mt-5 h-1 w-56 sm:w-80 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full shadow-[0_0_24px_rgba(239,68,68,1)]"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 1.1, delay: 0.4 }}
+                transition={{ duration: 0.8, delay: 0.25 }}
               />
 
               <motion.p
-                className="mt-5 text-gray-300 tracking-[0.14em] sm:tracking-[0.28em] text-xs sm:text-sm"
+                className="mt-5 text-gray-300 tracking-[0.12em] sm:tracking-[0.25em] text-xs sm:text-sm"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.45 }}
               >
-                FORGING PREMIUM DIGITAL EXPERIENCES
+                PREMIUM DIGITAL EXPERIENCES
               </motion.p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <motion.div
-        className="fixed z-[998] hidden lg:block w-8 h-8 rounded-full pointer-events-none border border-red-500/60 mix-blend-difference"
-        animate={{
-          x: cursor.x - 16,
-          y: cursor.y - 16,
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 35 }}
-      />
-
       <div className="fixed inset-0 pointer-events-none">
-        <motion.div
-          style={{ scale: glowScale }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.32),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.34),transparent_36%)]"
-        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.28),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(127,29,29,0.3),transparent_42%)]" />
 
-        <motion.div
-          className="absolute inset-0 opacity-15 sm:opacity-20"
-          animate={{ backgroundPosition: ["0px 0px", "100px 100px"] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+        <div
+          className="absolute inset-0 opacity-[0.13] sm:opacity-[0.18]"
           style={{
             backgroundImage:
               "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-            backgroundSize: "70px 70px",
+            backgroundSize: "72px 72px",
           }}
         />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.9))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.92))]" />
 
-        <div className="hidden sm:block">
-          {sparks.map((spark) => (
-            <motion.span
-              key={spark.id}
-              className="absolute rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]"
-              style={{
-                left: spark.left,
-                top: spark.top,
-                width: spark.size,
-                height: spark.size,
-              }}
-              animate={{
-                y: [0, -120, 0],
-                opacity: [0, 1, 0],
-                scale: [0.4, 1.4, 0.4],
-              }}
-              transition={{
-                duration: spark.duration,
-                repeat: Infinity,
-                delay: spark.delay,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
+        {particles.map((spark) => (
+          <motion.span
+            key={spark.id}
+            className="absolute rounded-full bg-red-500 shadow-[0_0_12px_rgba(239,68,68,1)]"
+            style={{
+              left: spark.left,
+              top: spark.top,
+              width: spark.size,
+              height: spark.size,
+              willChange: "transform, opacity",
+            }}
+            animate={{
+              y: [0, -90, 0],
+              opacity: [0, 0.9, 0],
+              scale: [0.6, 1.2, 0.6],
+            }}
+            transition={{
+              duration: spark.duration,
+              repeat: Infinity,
+              delay: spark.delay,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
 
-          {slashLines.map((line) => (
+        {!isMobile &&
+          slashLines.map((line) => (
             <motion.div
               key={line.id}
-              className="absolute h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent rotate-[-18deg]"
+              className="absolute h-[1px] bg-gradient-to-r from-transparent via-red-500/60 to-transparent rotate-[-18deg]"
               style={{
                 top: line.top,
                 left: "-30%",
                 width: line.width,
+                willChange: "transform, opacity",
               }}
               animate={{
                 x: ["0vw", "160vw"],
                 opacity: [0, 1, 0],
               }}
               transition={{
-                duration: 2.5,
+                duration: 2.6,
                 repeat: Infinity,
                 delay: line.delay,
-                repeatDelay: 3,
+                repeatDelay: 4,
                 ease: "easeInOut",
               }}
             />
           ))}
 
-          {floatingWords.map((word, index) => (
-            <motion.div
-              key={word}
-              className="absolute text-white/[0.035] font-black tracking-[0.35em] text-4xl md:text-6xl"
-              style={{
-                top: `${18 + index * 16}%`,
-                left: index % 2 === 0 ? "6%" : "62%",
-              }}
-              animate={{
-                y: [0, -25, 0],
-                opacity: [0.025, 0.08, 0.025],
-                scale: [1, 1.08, 1],
-              }}
-              transition={{
-                duration: 5 + index,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              {word}
-            </motion.div>
-          ))}
-        </div>
-
         <motion.div
-          className="absolute -top-44 -right-44 w-[520px] sm:w-[620px] h-[520px] sm:h-[620px] rounded-full bg-red-600/24 blur-[120px] sm:blur-[140px]"
-          animate={{ scale: [1, 1.22, 1], opacity: [0.35, 0.75, 0.35] }}
-          transition={{ duration: 7, repeat: Infinity }}
+          className="absolute -top-44 -right-44 w-[420px] sm:w-[620px] h-[420px] sm:h-[620px] rounded-full bg-red-600/20 blur-[95px] sm:blur-[140px]"
+          animate={{ scale: [1, 1.16, 1], opacity: [0.35, 0.65, 0.35] }}
+          transition={{ duration: 8, repeat: Infinity }}
         />
 
         <motion.div
-          className="absolute bottom-0 -left-44 w-[420px] sm:w-[520px] h-[420px] sm:h-[520px] rounded-full bg-red-900/35 blur-[120px] sm:blur-[140px]"
-          animate={{ scale: [1.15, 1, 1.15], opacity: [0.3, 0.68, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute bottom-0 -left-44 w-[360px] sm:w-[520px] h-[360px] sm:h-[520px] rounded-full bg-red-900/28 blur-[90px] sm:blur-[140px]"
+          animate={{ scale: [1.12, 1, 1.12], opacity: [0.28, 0.55, 0.28] }}
+          transition={{ duration: 9, repeat: Infinity }}
         />
       </div>
 
       <motion.nav
-        initial={{ y: -90, opacity: 0 }}
+        initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/65 backdrop-blur-2xl px-4 sm:px-7 py-3 sm:py-4 flex items-center justify-between shadow-[0_0_45px_rgba(239,68,68,0.25)]"
+        transition={{ delay: 1.1, duration: 0.65, ease: "easeOut" }}
+        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-6xl rounded-full border border-white/10 bg-black/70 backdrop-blur-xl px-4 sm:px-7 py-3 sm:py-4 flex items-center justify-between shadow-[0_0_35px_rgba(239,68,68,0.22)]"
       >
         <a href="#" className="flex items-center gap-2 sm:gap-3">
           <motion.img
             src={logo}
             alt="Samurai Websites Logo"
-            className="w-8 h-8 sm:w-10 sm:h-10 object-contain drop-shadow-[0_0_18px_rgba(239,68,68,0.9)]"
-            whileHover={{ rotate: 360, scale: 1.18 }}
-            transition={{ duration: 0.7 }}
+            className="w-8 h-8 sm:w-10 sm:h-10 object-contain drop-shadow-[0_0_16px_rgba(239,68,68,0.85)]"
+            whileHover={{ rotate: 360, scale: 1.15 }}
+            transition={{ duration: 0.65 }}
           />
-          <span className="font-black tracking-[0.2em] sm:tracking-[0.35em] text-red-500 text-[10px] sm:text-sm">
+          <span className="font-black tracking-[0.18em] sm:tracking-[0.35em] text-red-500 text-[10px] sm:text-sm">
             SAMURAI
           </span>
         </a>
@@ -369,16 +359,16 @@ export default function App() {
               className="hover:text-red-500 transition relative group"
             >
               {item}
-              <span className="absolute left-0 -bottom-2 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-300 shadow-[0_0_12px_rgba(239,68,68,1)]" />
+              <span className="absolute left-0 -bottom-2 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-300" />
             </a>
           ))}
         </div>
 
         <motion.a
           href="#contact"
-          whileHover={{ scale: 1.08, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2 rounded-full bg-red-600 px-4 sm:px-5 py-2 text-xs sm:text-sm font-black hover:bg-red-700 transition shadow-lg shadow-red-600/30"
+          whileHover={{ scale: 1.06, y: -2 }}
+          whileTap={{ scale: 0.96 }}
+          className="flex items-center gap-2 rounded-full bg-red-600 px-4 sm:px-5 py-2 text-xs sm:text-sm font-black hover:bg-red-700 transition shadow-lg shadow-red-600/25"
         >
           Start <FaArrowRight className="hidden sm:block" />
         </motion.a>
@@ -388,7 +378,7 @@ export default function App() {
         <section className="min-h-screen flex items-center pt-28 sm:pt-36 px-4 sm:px-6">
           <motion.div
             style={{ y: heroY }}
-            className="absolute top-28 left-1/2 -translate-x-1/2 text-[18vw] font-black text-white/[0.025] tracking-tighter pointer-events-none whitespace-nowrap"
+            className="absolute top-32 left-1/2 -translate-x-1/2 text-[18vw] font-black text-white/[0.025] tracking-tighter pointer-events-none whitespace-nowrap"
           >
             SAMURAI
           </motion.div>
@@ -402,7 +392,7 @@ export default function App() {
             >
               <motion.div
                 variants={fadeUp}
-                className="inline-flex items-center gap-3 rounded-full border border-red-500/30 bg-red-500/10 px-4 sm:px-5 py-2 text-red-400 text-[11px] sm:text-sm font-black tracking-[0.16em] sm:tracking-[0.24em] shadow-[0_0_25px_rgba(239,68,68,0.18)]"
+                className="inline-flex items-center gap-3 rounded-full border border-red-500/30 bg-red-500/10 px-4 sm:px-5 py-2 text-red-400 text-[11px] sm:text-sm font-black tracking-[0.15em] sm:tracking-[0.22em]"
               >
                 <FaFire /> FUTURISTIC WEB DESIGN
               </motion.div>
@@ -413,18 +403,18 @@ export default function App() {
               >
                 Samurai Websites{" "}
                 <motion.span
-                  className="relative inline-block text-red-500 drop-shadow-[0_0_34px_rgba(239,68,68,0.7)]"
+                  className="relative inline-block text-red-500"
                   animate={{
                     textShadow: [
-                      "0 0 18px rgba(239,68,68,0.5)",
-                      "0 0 38px rgba(239,68,68,1)",
-                      "0 0 18px rgba(239,68,68,0.5)",
+                      "0 0 18px rgba(239,68,68,0.45)",
+                      "0 0 34px rgba(239,68,68,0.9)",
+                      "0 0 18px rgba(239,68,68,0.45)",
                     ],
                   }}
-                  transition={{ duration: 2.2, repeat: Infinity }}
+                  transition={{ duration: 2.6, repeat: Infinity }}
                 >
                   builds premium.
-                  <span className="absolute left-0 -bottom-2 w-full h-2 bg-red-600/40 blur-md" />
+                  <span className="absolute left-0 -bottom-2 w-full h-2 bg-red-600/35 blur-md" />
                 </motion.span>
               </motion.h1>
 
@@ -442,17 +432,17 @@ export default function App() {
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               >
                 <motion.a
-                  whileHover={{ scale: 1.07, y: -4 }}
+                  whileHover={{ scale: 1.055, y: -3 }}
                   whileTap={{ scale: 0.96 }}
                   href="#contact"
-                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] flex items-center justify-center gap-3"
+                  className="group px-8 py-4 rounded-full bg-red-600 hover:bg-red-700 transition font-black shadow-[0_0_34px_rgba(239,68,68,0.48)] flex items-center justify-center gap-3"
                 >
                   Build My Website
                   <FaRocket className="group-hover:translate-x-1 group-hover:-translate-y-1 transition" />
                 </motion.a>
 
                 <motion.a
-                  whileHover={{ scale: 1.07, y: -4 }}
+                  whileHover={{ scale: 1.055, y: -3 }}
                   whileTap={{ scale: 0.96 }}
                   href="#services"
                   className="px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:border-red-500 hover:bg-red-500/10 transition font-bold flex items-center justify-center"
@@ -463,36 +453,36 @@ export default function App() {
 
               <motion.div
                 variants={fadeUp}
-                className="relative mx-auto lg:mx-0 max-w-xl rounded-[2rem] border border-red-500/20 bg-black/40 p-4 overflow-hidden"
+                className="relative mx-auto lg:mx-0 max-w-xl rounded-[2rem] border border-red-500/20 bg-black/45 p-4 overflow-hidden"
               >
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/15 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/14 to-transparent"
                   animate={{ x: ["-120%", "120%"] }}
                   transition={{
-                    duration: 2.4,
+                    duration: 3,
                     repeat: Infinity,
-                    repeatDelay: 1.8,
+                    repeatDelay: 2,
                   }}
                 />
 
                 <div className="relative flex items-center gap-4">
                   <motion.div
-                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center shadow-[0_0_28px_rgba(239,68,68,0.8)] shrink-0"
+                    className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center shadow-[0_0_24px_rgba(239,68,68,0.75)] shrink-0"
                     animate={{
-                      rotate: [0, 8, -8, 0],
-                      scale: [1, 1.08, 1],
+                      rotate: [0, 6, -6, 0],
+                      scale: [1, 1.06, 1],
                     }}
-                    transition={{ duration: 2.2, repeat: Infinity }}
+                    transition={{ duration: 2.5, repeat: Infinity }}
                   >
                     ⚔️
                   </motion.div>
 
                   <div className="text-left">
                     <p className="font-black text-white">
-                      Live cinematic brand system
+                      Cinematic brand system
                     </p>
                     <p className="text-gray-500 text-sm">
-                      Built to make your website feel expensive instantly.
+                      Smooth, premium, mobile-friendly motion.
                     </p>
                   </div>
                 </div>
@@ -500,17 +490,17 @@ export default function App() {
 
               <motion.div
                 variants={fadeUp}
-                className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0 pt-4 sm:pt-6"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0 pt-4"
               >
                 {[
                   ["Premium", "Brand Feel"],
-                  ["Cinematic", "Motion UI"],
+                  ["Smooth", "Mobile UI"],
                   ["Lead", "Focused Design"],
                 ].map(([num, label]) => (
                   <motion.div
                     key={label}
-                    whileHover={{ y: -8, scale: 1.04 }}
-                    className="rounded-3xl border border-white/10 bg-white/[0.045] p-5 backdrop-blur-xl hover:border-red-500/50 transition"
+                    whileHover={{ y: -6, scale: 1.025 }}
+                    className="rounded-3xl border border-white/10 bg-white/[0.045] p-5 backdrop-blur-xl hover:border-red-500/45 transition"
                   >
                     <p className="text-2xl sm:text-xl md:text-3xl font-black text-red-500">
                       {num}
@@ -524,99 +514,85 @@ export default function App() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, rotate: 4 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 1.7, duration: 1, ease: "easeOut" }}
-              className="relative min-h-[420px] sm:min-h-[620px] flex items-center justify-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.35, duration: 0.8, ease: "easeOut" }}
+              className="relative min-h-[390px] sm:min-h-[600px] flex items-center justify-center"
             >
               <motion.div
-                className="absolute -inset-10 bg-red-600/25 blur-3xl rounded-full"
-                animate={{ scale: [1, 1.14, 1], opacity: [0.45, 0.8, 0.45] }}
-                transition={{ duration: 4.5, repeat: Infinity }}
+                className="absolute -inset-8 bg-red-600/20 blur-3xl rounded-full"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.42, 0.72, 0.42] }}
+                transition={{ duration: 5.5, repeat: Infinity }}
               />
 
               <motion.div
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-full max-w-[620px] h-[390px] sm:h-[560px] rounded-[2rem] sm:rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-full max-w-[620px] h-[370px] sm:h-[560px] rounded-[2rem] sm:rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-lg shadow-[0_0_72px_rgba(239,68,68,0.28)] overflow-hidden flex items-center justify-center"
               >
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20 pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/18 to-transparent z-20 pointer-events-none"
                   animate={{ x: ["-140%", "140%"] }}
-                  transition={{ duration: 2.7, repeat: Infinity, repeatDelay: 2.2 }}
+                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.8 }}
                 />
 
                 <motion.div
                   className="absolute inset-5 sm:inset-8 rounded-[1.6rem] sm:rounded-[2.2rem] border border-red-500/25"
                   animate={{
                     boxShadow: [
-                      "0 0 25px rgba(239,68,68,0.25)",
-                      "0 0 70px rgba(239,68,68,0.55)",
-                      "0 0 25px rgba(239,68,68,0.25)",
+                      "0 0 20px rgba(239,68,68,0.24)",
+                      "0 0 50px rgba(239,68,68,0.5)",
+                      "0 0 20px rgba(239,68,68,0.24)",
                     ],
                   }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  transition={{ duration: 3.4, repeat: Infinity }}
                 />
 
                 <motion.div
-                  className="absolute w-[240px] h-[240px] sm:w-[390px] sm:h-[390px] rounded-full border border-red-500/30"
+                  className="absolute w-[230px] h-[230px] sm:w-[380px] sm:h-[380px] rounded-full border border-red-500/25"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
                 />
 
-                <motion.div
-                  className="absolute w-[310px] h-[310px] sm:w-[490px] sm:h-[490px] rounded-full border border-white/10"
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                />
-
-                <div className="hidden sm:block">
-                  {orbitDots.map((dot) => (
-                    <motion.div
-                      key={dot.id}
-                      className="absolute w-[430px] h-[430px]"
-                      style={{ rotate: dot.rotate }}
-                      animate={{ rotate: dot.rotate + 360 }}
-                      transition={{
-                        duration: 24,
-                        repeat: Infinity,
-                        ease: "linear",
-                        delay: dot.delay,
-                      }}
-                    >
-                      <span className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,1)]" />
-                    </motion.div>
-                  ))}
-                </div>
+                {!isMobile && (
+                  <motion.div
+                    className="absolute w-[490px] h-[490px] rounded-full border border-white/10"
+                    animate={{ rotate: -360 }}
+                    transition={{
+                      duration: 38,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                )}
 
                 <motion.div
                   className="relative z-30 text-center px-6 sm:px-8"
-                  initial={{ scale: 0.85, opacity: 0 }}
+                  initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 2, duration: 0.8 }}
+                  transition={{ delay: 1.8, duration: 0.75 }}
                 >
                   <motion.img
                     src={logo}
                     alt="Samurai Websites Brand Logo"
-                    className="w-20 h-20 sm:w-32 sm:h-32 object-contain mx-auto mb-5 sm:mb-8 drop-shadow-[0_0_42px_rgba(239,68,68,1)]"
+                    className="w-20 h-20 sm:w-32 sm:h-32 object-contain mx-auto mb-5 sm:mb-8 drop-shadow-[0_0_36px_rgba(239,68,68,0.95)]"
                     animate={{
-                      y: [0, -12, 0],
-                      rotate: [0, 3, -3, 0],
-                      scale: [1, 1.08, 1],
+                      y: [0, -10, 0],
+                      scale: [1, 1.06, 1],
                     }}
-                    transition={{ duration: 3.2, repeat: Infinity }}
+                    transition={{ duration: 3.5, repeat: Infinity }}
                   />
 
                   <motion.h2
                     className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight"
                     animate={{
                       textShadow: [
-                        "0 0 18px rgba(255,255,255,0.15)",
-                        "0 0 32px rgba(239,68,68,0.55)",
-                        "0 0 18px rgba(255,255,255,0.15)",
+                        "0 0 14px rgba(255,255,255,0.12)",
+                        "0 0 28px rgba(239,68,68,0.48)",
+                        "0 0 14px rgba(255,255,255,0.12)",
                       ],
                     }}
-                    transition={{ duration: 2.6, repeat: Infinity }}
+                    transition={{ duration: 2.8, repeat: Infinity }}
                   >
                     SAMURAI
                     <span className="block text-red-500">WEBSITES</span>
@@ -629,8 +605,8 @@ export default function App() {
 
                   <motion.div
                     className="mt-6 sm:mt-8 inline-flex items-center gap-3 rounded-full border border-red-500/35 bg-red-500/10 px-4 sm:px-6 py-3 text-red-300 font-black tracking-[0.12em] sm:tracking-[0.18em] text-[10px] sm:text-xs"
-                    animate={{ scale: [1, 1.04, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={{ scale: [1, 1.035, 1] }}
+                    transition={{ duration: 2.4, repeat: Infinity }}
                   >
                     <FaBolt /> CRAFTED TO IMPRESS
                   </motion.div>
@@ -645,16 +621,14 @@ export default function App() {
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            className="max-w-6xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-[0_0_70px_rgba(239,68,68,0.12)]"
+            viewport={{ once: true, amount: 0.22 }}
+            className="max-w-6xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-lg p-6 sm:p-8 md:p-14 relative overflow-hidden shadow-[0_0_60px_rgba(239,68,68,0.1)]"
           >
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
               animate={{ x: ["-120%", "120%"] }}
-              transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
+              transition={{ duration: 5, repeat: Infinity, repeatDelay: 3 }}
             />
-
-            <div className="absolute -right-32 -top-32 w-80 h-80 bg-red-600/20 rounded-full blur-3xl" />
 
             <div className="relative">
               <p className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
@@ -672,29 +646,13 @@ export default function App() {
               </p>
 
               <div className="grid md:grid-cols-3 gap-5 mt-10">
-                {[
-                  {
-                    icon: <FaCrown />,
-                    title: "Premium Look",
-                    text: "Luxury layouts that instantly make brands feel more valuable.",
-                  },
-                  {
-                    icon: <FaBolt />,
-                    title: "Insane Motion",
-                    text: "Smooth animations that make the website feel alive.",
-                  },
-                  {
-                    icon: <FaShieldAlt />,
-                    title: "Trust Builder",
-                    text: "Clean design that makes clients feel confident to contact you.",
-                  },
-                ].map((card) => (
+                {premiumCards.map((card) => (
                   <motion.div
                     key={card.title}
-                    whileHover={{ y: -12, scale: 1.035 }}
-                    className="rounded-3xl border border-white/10 bg-black/35 p-6 hover:border-red-500/50 transition group"
+                    whileHover={{ y: -10, scale: 1.025 }}
+                    className="rounded-3xl border border-white/10 bg-black/35 p-6 hover:border-red-500/45 transition group"
                   >
-                    <div className="text-red-500 text-3xl mb-5 group-hover:scale-125 transition">
+                    <div className="text-red-500 text-3xl mb-5 group-hover:scale-110 transition">
                       {card.icon}
                     </div>
                     <h3 className="text-xl font-black">{card.title}</h3>
@@ -711,28 +669,28 @@ export default function App() {
         <section id="founder" className="px-4 sm:px-6 py-16 sm:py-24">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -60, rotate: -2 }}
-              whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.85 }}
+              initial={{ opacity: 0, x: -45 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.22 }}
+              transition={{ duration: 0.75 }}
               className="relative"
             >
-              <div className="absolute -inset-4 bg-red-600/20 blur-3xl rounded-full" />
+              <div className="absolute -inset-4 bg-red-600/18 blur-3xl rounded-full" />
 
               <motion.div
-                whileHover={{ scale: 1.02, rotate: 1 }}
-                className="relative w-full h-[460px] sm:h-[520px] rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 shadow-[0_0_80px_rgba(239,68,68,0.2)] overflow-hidden bg-black/60 flex items-center justify-center p-3 sm:p-0"
+                whileHover={{ scale: 1.015 }}
+                className="relative w-full h-[500px] sm:h-[540px] rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 shadow-[0_0_70px_rgba(239,68,68,0.18)] overflow-hidden bg-black/70 flex items-center justify-center p-3"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/12 to-transparent z-10"
                   animate={{ x: ["-120%", "120%"] }}
-                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.5 }}
+                  transition={{ duration: 4, repeat: Infinity, repeatDelay: 3 }}
                 />
 
                 <img
                   src={founder}
                   alt="Founder"
-                  className="relative z-0 w-full h-full object-contain sm:object-cover sm:object-top rounded-[1.5rem] sm:rounded-[2.5rem]"
+                  className="relative z-0 w-full h-full object-contain rounded-[1.5rem]"
                 />
               </motion.div>
             </motion.div>
@@ -741,7 +699,7 @@ export default function App() {
               variants={stagger}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
+              viewport={{ once: true, amount: 0.22 }}
               className="space-y-6 text-center lg:text-left"
             >
               <motion.p
@@ -775,7 +733,7 @@ export default function App() {
                   (tag) => (
                     <motion.span
                       key={tag}
-                      whileHover={{ y: -4, scale: 1.05 }}
+                      whileHover={{ y: -4, scale: 1.04 }}
                       className="rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-red-300 text-sm font-bold"
                     >
                       {tag}
@@ -791,7 +749,7 @@ export default function App() {
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
                   animate={{ x: ["-120%", "120%"] }}
-                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                  transition={{ duration: 4, repeat: Infinity, repeatDelay: 3 }}
                 />
 
                 <div className="relative">
@@ -814,7 +772,7 @@ export default function App() {
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
+              viewport={{ once: true, amount: 0.22 }}
               className="text-center lg:text-left"
             >
               <p className="text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
@@ -827,42 +785,26 @@ export default function App() {
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-6">
-              {[
-                {
-                  icon: <FaLaptopCode />,
-                  title: "Premium Websites",
-                  text: "Modern landing pages, portfolios, business sites, and high-end brand pages.",
-                },
-                {
-                  icon: <FaStar />,
-                  title: "Cinematic UI",
-                  text: "Smooth animations, futuristic layouts, luxury visuals, and clean user experience.",
-                },
-                {
-                  icon: <FaCode />,
-                  title: "Lead Forms",
-                  text: "Contact forms connected to backend email so every client message reaches you.",
-                },
-              ].map((service, index) => (
+              {services.map((service, index) => (
                 <motion.div
                   key={service.title}
-                  initial={{ opacity: 0, y: 55, scale: 0.94 }}
+                  initial={{ opacity: 0, y: 45, scale: 0.96 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, amount: 0.25 }}
-                  transition={{ delay: index * 0.1, duration: 0.7 }}
+                  viewport={{ once: true, amount: 0.22 }}
+                  transition={{ delay: index * 0.08, duration: 0.65 }}
                   whileHover={{
-                    y: -14,
-                    scale: 1.035,
-                    rotate: index === 1 ? 0 : index === 0 ? -1 : 1,
+                    y: -12,
+                    scale: 1.025,
+                    rotate: index === 1 ? 0 : index === 0 ? -0.6 : 0.6,
                   }}
-                  className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-7 sm:p-8 hover:border-red-500/60 transition duration-300 relative overflow-hidden text-center sm:text-left"
+                  className="group rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-lg p-7 sm:p-8 hover:border-red-500/50 transition duration-300 relative overflow-hidden text-center sm:text-left"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 via-red-600/0 to-red-600/20 opacity-0 group-hover:opacity-100 transition duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 via-red-600/0 to-red-600/18 opacity-0 group-hover:opacity-100 transition duration-300" />
 
                   <motion.div
                     className="relative text-4xl mb-6 text-red-500 flex justify-center sm:block"
                     whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 0.75 }}
                   >
                     {service.icon}
                   </motion.div>
@@ -886,13 +828,13 @@ export default function App() {
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
-              className="rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/25 bg-red-950/20 p-6 sm:p-8 md:p-14 backdrop-blur-xl relative overflow-hidden"
+              viewport={{ once: true, amount: 0.22 }}
+              className="rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/25 bg-red-950/20 p-6 sm:p-8 md:p-14 backdrop-blur-lg relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent"
                 animate={{ x: ["-120%", "120%"] }}
-                transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+                transition={{ duration: 4, repeat: Infinity, repeatDelay: 2 }}
               />
 
               <div className="relative grid sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
@@ -904,10 +846,10 @@ export default function App() {
                 ].map((item) => (
                   <motion.div
                     key={item}
-                    whileHover={{ scale: 1.05, y: -6 }}
+                    whileHover={{ scale: 1.035, y: -5 }}
                     className="rounded-3xl bg-black/35 border border-white/10 p-6 flex items-center gap-4"
                   >
-                    <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_24px_rgba(239,68,68,0.8)] shrink-0">
+                    <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_22px_rgba(239,68,68,0.75)] shrink-0">
                       <FaCheck />
                     </span>
                     <p className="font-black">{item}</p>
@@ -922,13 +864,13 @@ export default function App() {
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-stretch">
             <motion.form
               onSubmit={handleSubmit}
-              initial={{ opacity: 0, x: -60 }}
+              initial={{ opacity: 0, x: -45 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8 }}
-              className="rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden"
+              transition={{ duration: 0.7 }}
+              className="rounded-[2rem] sm:rounded-[2.5rem] border border-white/10 bg-white/[0.045] backdrop-blur-lg p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute -top-32 -right-32 w-72 h-72 rounded-full bg-red-600/20 blur-3xl" />
+              <div className="absolute -top-32 -right-32 w-72 h-72 rounded-full bg-red-600/18 blur-3xl" />
 
               <p className="relative text-red-500 tracking-[0.25em] sm:tracking-[0.35em] font-black text-xs sm:text-sm">
                 CONTACT
@@ -953,7 +895,7 @@ export default function App() {
                     onChange={handleChange}
                     required={name === "name" || name === "email"}
                     placeholder={placeholder}
-                    className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/40 transition text-sm sm:text-base hover:scale-[1.01] focus:scale-[1.01]"
+                    className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/35 transition text-sm sm:text-base focus:scale-[1.005]"
                   />
                 ))}
 
@@ -964,15 +906,15 @@ export default function App() {
                   required
                   placeholder="Tell us what website you want..."
                   rows="5"
-                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base hover:scale-[1.01] focus:scale-[1.01]"
+                  className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 transition text-sm sm:text-base focus:scale-[1.005]"
                 />
 
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.025 }}
                   whileTap={{ scale: 0.96 }}
                   type="submit"
                   disabled={sending}
-                  className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black shadow-[0_0_42px_rgba(239,68,68,0.55)] disabled:opacity-60 flex items-center justify-center gap-3"
+                  className="w-full rounded-full bg-red-600 hover:bg-red-700 transition py-4 font-black shadow-[0_0_36px_rgba(239,68,68,0.5)] disabled:opacity-60 flex items-center justify-center gap-3"
                 >
                   {sending ? (
                     <>
@@ -1003,9 +945,9 @@ export default function App() {
                 <AnimatePresence>
                   {sent && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                      initial={{ opacity: 0, y: 18, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                      exit={{ opacity: 0, y: -18, scale: 0.95 }}
                       className="rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-300 font-bold text-sm sm:text-base"
                     >
                       Message delivered to Samurai Websites 🔥
@@ -1016,16 +958,16 @@ export default function App() {
             </motion.form>
 
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
+              initial={{ opacity: 0, x: 45 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8 }}
-              className="rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 bg-red-950/20 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col justify-center relative overflow-hidden text-center lg:text-left"
+              transition={{ duration: 0.7 }}
+              className="rounded-[2rem] sm:rounded-[2.5rem] border border-red-500/30 bg-red-950/20 backdrop-blur-lg p-6 sm:p-8 md:p-10 flex flex-col justify-center relative overflow-hidden text-center lg:text-left"
             >
               <motion.div
-                className="absolute -right-24 top-10 w-64 h-64 bg-red-600/20 rounded-full blur-3xl"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 5, repeat: Infinity }}
+                className="absolute -right-24 top-10 w-64 h-64 bg-red-600/18 rounded-full blur-3xl"
+                animate={{ scale: [1, 1.12, 1] }}
+                transition={{ duration: 6, repeat: Infinity }}
               />
 
               <div className="relative">
@@ -1039,13 +981,13 @@ export default function App() {
                 </p>
 
                 <div className="flex justify-center lg:justify-start gap-5 text-3xl mt-8 text-red-500">
-                  <motion.span whileHover={{ y: -8, scale: 1.2 }}>
+                  <motion.span whileHover={{ y: -7, scale: 1.16 }}>
                     <FaDiscord />
                   </motion.span>
-                  <motion.span whileHover={{ y: -8, scale: 1.2 }}>
+                  <motion.span whileHover={{ y: -7, scale: 1.16 }}>
                     <FaInstagram />
                   </motion.span>
-                  <motion.span whileHover={{ y: -8, scale: 1.2 }}>
+                  <motion.span whileHover={{ y: -7, scale: 1.16 }}>
                     <FaEnvelope />
                   </motion.span>
                 </div>
@@ -1061,7 +1003,7 @@ export default function App() {
                       key={item}
                       className="flex items-center gap-3 text-gray-300"
                     >
-                      <span className="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,1)] shrink-0" />
+                      <span className="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_14px_rgba(239,68,68,1)] shrink-0" />
                       {item}
                     </div>
                   ))}
