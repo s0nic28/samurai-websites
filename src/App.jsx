@@ -6,7 +6,6 @@ import {
   FaCheck,
   FaCode,
   FaCrown,
-  FaEnvelope,
   FaFire,
   FaLaptopCode,
   FaPaperPlane,
@@ -99,74 +98,29 @@ function useContactForm() {
   };
 }
 
-/* ================= MOBILE UI ================= */
+/* ================= MOBILE UI: FAST VERSION ================= */
 
 function MobileUI() {
-  const [loaded, setLoaded] = useState(false);
-  const { formData, sending, sent, handleChange, handleSubmit } = useContactForm();
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 850);
-    return () => clearTimeout(timer);
-  }, []);
+  const { formData, sending, sent, handleChange, handleSubmit } =
+    useContactForm();
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 28 },
+    hidden: { opacity: 0, y: 18 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.55, ease: "easeOut" },
+      transition: { duration: 0.38, ease: "easeOut" },
     },
   };
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden selection:bg-red-600 selection:text-white">
-      <AnimatePresence>
-        {!loaded && (
-          <motion.div
-            className="fixed inset-0 z-[999] bg-black flex items-center justify-center px-6"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.45 }}
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.32),transparent_45%)]" />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.82, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.55 }}
-              className="relative text-center"
-            >
-              <img
-                src={logo}
-                alt="Samurai Logo"
-                className="w-24 h-24 object-contain mx-auto drop-shadow-[0_0_30px_rgba(239,68,68,0.9)]"
-              />
-              <h1 className="mt-6 text-3xl font-black tracking-[0.2em] text-red-500">
-                SAMURAI
-              </h1>
-              <p className="mt-3 text-xs tracking-[0.22em] text-gray-400">
-                MOBILE EXPERIENCE
-              </p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(239,68,68,0.28),transparent_34%),radial-gradient(circle_at_bottom,rgba(127,29,29,0.22),transparent_42%)]" />
-        <div
-          className="absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(239,68,68,0.22),transparent_38%),radial-gradient(circle_at_bottom,rgba(127,29,29,0.16),transparent_45%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black" />
       </div>
 
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] rounded-full border border-white/10 bg-black/75 backdrop-blur-xl px-4 py-3 flex items-center justify-between">
+      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] rounded-full border border-white/10 bg-black/85 backdrop-blur-md px-4 py-3 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2">
           <img src={logo} alt="logo" className="w-8 h-8 object-contain" />
           <span className="text-red-500 text-xs font-black tracking-[0.22em]">
@@ -176,20 +130,20 @@ function MobileUI() {
 
         <a
           href="#contact"
-          className="rounded-full bg-red-600 px-4 py-2 text-xs font-black shadow-[0_0_22px_rgba(239,68,68,0.45)]"
+          className="rounded-full bg-red-600 px-4 py-2 text-xs font-black shadow-[0_0_18px_rgba(239,68,68,0.35)]"
         >
           Start
         </a>
       </nav>
 
       <main className="relative z-10">
-        <section className="min-h-screen px-4 pt-28 pb-16 flex items-center">
+        <section className="min-h-screen px-4 pt-28 pb-12 flex items-center">
           <div className="w-full">
             <motion.div
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-400 text-[11px] font-black tracking-[0.16em]"
+              className="inline-flex items-center gap-2 rounded-full border border-red-500/25 bg-red-500/10 px-4 py-2 text-red-400 text-[11px] font-black tracking-[0.16em]"
             >
               <FaFire /> FUTURISTIC WEB DESIGN
             </motion.div>
@@ -198,36 +152,34 @@ function MobileUI() {
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.05 }}
               className="mt-6 text-5xl font-black leading-[0.95]"
             >
               Samurai Websites{" "}
-              <span className="block text-red-500 drop-shadow-[0_0_25px_rgba(239,68,68,0.65)]">
-                builds premium.
-              </span>
+              <span className="block text-red-500">builds premium.</span>
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.1 }}
               className="mt-6 text-gray-400 text-base leading-relaxed"
             >
-              Smooth mobile-first websites with cinematic sections, premium
-              branding, and lead forms that actually reach your email.
+              Smooth mobile-first websites with premium branding, clean
+              sections, and lead forms that reach your email.
             </motion.p>
 
             <motion.div
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.15 }}
               className="mt-7 flex flex-col gap-3"
             >
               <a
                 href="#contact"
-                className="w-full rounded-full bg-red-600 py-4 text-center font-black shadow-[0_0_34px_rgba(239,68,68,0.45)]"
+                className="w-full rounded-full bg-red-600 py-4 text-center font-black shadow-[0_0_26px_rgba(239,68,68,0.38)]"
               >
                 Build My Website
               </a>
@@ -244,86 +196,53 @@ function MobileUI() {
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.4 }}
-              className="mt-8 rounded-[2rem] border border-red-500/25 bg-white/[0.05] backdrop-blur-xl p-5 overflow-hidden relative"
+              transition={{ delay: 0.2 }}
+              className="mt-8 rounded-[2rem] border border-red-500/20 bg-white/[0.045] p-5"
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/12 to-transparent"
-                animate={{ x: ["-120%", "120%"] }}
-                transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-              />
-
-              <div className="relative flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-red-600 flex items-center justify-center text-2xl shadow-[0_0_24px_rgba(239,68,68,0.75)]">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-red-600 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(239,68,68,0.55)]">
                   ⚔️
                 </div>
 
                 <div>
-                  <p className="font-black">Mobile optimized UI</p>
+                  <p className="font-black">Fast mobile UI</p>
                   <p className="text-sm text-gray-500">
-                    Smooth, fast, premium, not laggy.
+                    Smooth, premium, and optimized.
                   </p>
                 </div>
               </div>
             </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.5 }}
-              className="mt-8 grid grid-cols-1 gap-4"
-            >
-              {[
-                ["Premium", "Brand feel that looks expensive."],
-                ["Smooth", "Animations made for phones."],
-                ["Leads", "Contact form connected to email."],
-              ].map(([title, text]) => (
-                <div
-                  key={title}
-                  className="rounded-[1.5rem] border border-white/10 bg-black/40 p-5"
-                >
-                  <p className="text-red-500 text-2xl font-black">{title}</p>
-                  <p className="text-gray-500 text-sm mt-1">{text}</p>
-                </div>
-              ))}
-            </motion.div>
           </div>
         </section>
 
-        <section className="px-4 py-14">
-          <motion.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.55 }}
-            className="rounded-[2rem] border border-red-500/25 bg-red-950/20 p-6 backdrop-blur-xl"
-          >
+        <section className="px-4 py-10">
+          <div className="rounded-[2rem] border border-red-500/20 bg-red-950/15 p-6">
             <div className="text-center">
               <img
                 src={logo}
                 alt="Samurai"
-                className="w-20 h-20 object-contain mx-auto drop-shadow-[0_0_28px_rgba(239,68,68,0.8)]"
+                loading="lazy"
+                className="w-20 h-20 object-contain mx-auto"
               />
               <h2 className="mt-5 text-4xl font-black">
                 SAMURAI
                 <span className="block text-red-500">WEBSITES</span>
               </h2>
               <p className="mt-4 text-gray-400 leading-relaxed">
-                Premium digital experiences forged with modern UI, cinematic
-                motion, and samurai precision.
+                Premium digital experiences forged with modern UI and samurai
+                precision.
               </p>
             </div>
-          </motion.div>
+          </div>
         </section>
 
-        <section id="about" className="px-4 py-14">
+        <section id="about" className="px-4 py-10">
           <motion.div
-            initial={{ opacity: 0, y: 26 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.55 }}
-            className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl"
+            transition={{ duration: 0.35 }}
+            className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6"
           >
             <p className="text-red-500 tracking-[0.25em] font-black text-xs">
               ABOUT
@@ -339,18 +258,20 @@ function MobileUI() {
           </motion.div>
         </section>
 
-        <section id="founder" className="px-4 py-14">
+        <section id="founder" className="px-4 py-10">
           <motion.div
-            initial={{ opacity: 0, y: 26 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.55 }}
-            className="rounded-[2rem] border border-red-500/25 bg-black/45 p-4 backdrop-blur-xl"
+            transition={{ duration: 0.35 }}
+            className="rounded-[2rem] border border-red-500/20 bg-black/45 p-4"
           >
             <div className="rounded-[1.5rem] bg-black/70 overflow-hidden border border-white/10">
               <img
                 src={founder}
                 alt="Founder"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-auto object-contain"
               />
             </div>
@@ -370,7 +291,7 @@ function MobileUI() {
                   (tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 text-red-300 text-xs font-bold"
+                      className="rounded-full border border-red-500/25 bg-red-500/10 px-4 py-2 text-red-300 text-xs font-bold"
                     >
                       {tag}
                     </span>
@@ -381,12 +302,12 @@ function MobileUI() {
           </motion.div>
         </section>
 
-        <section id="services" className="px-4 py-14">
+        <section id="services" className="px-4 py-10">
           <motion.div
-            initial={{ opacity: 0, y: 26 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.55 }}
+            transition={{ duration: 0.35 }}
           >
             <p className="text-red-500 tracking-[0.25em] font-black text-xs">
               SERVICES
@@ -405,7 +326,7 @@ function MobileUI() {
                 {
                   icon: <FaStar />,
                   title: "Smooth UI",
-                  text: "Mobile-friendly animations that feel clean.",
+                  text: "Mobile-friendly sections that feel clean.",
                 },
                 {
                   icon: <FaCode />,
@@ -415,7 +336,7 @@ function MobileUI() {
               ].map((service) => (
                 <div
                   key={service.title}
-                  className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 backdrop-blur-xl"
+                  className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5"
                 >
                   <div className="text-red-500 text-3xl">{service.icon}</div>
                   <h3 className="mt-4 text-xl font-black">{service.title}</h3>
@@ -428,36 +349,32 @@ function MobileUI() {
           </motion.div>
         </section>
 
-        <section className="px-4 py-14">
+        <section className="px-4 py-10">
           <div className="grid grid-cols-1 gap-4">
             {["Looks premium", "Loads clean", "Mobile smooth", "Gets leads"].map(
               (item) => (
-                <motion.div
+                <div
                   key={item}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.45 }}
-                  className="rounded-[1.5rem] border border-red-500/20 bg-red-950/20 p-5 flex items-center gap-4"
+                  className="rounded-[1.5rem] border border-red-500/20 bg-red-950/15 p-5 flex items-center gap-4"
                 >
-                  <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_18px_rgba(239,68,68,0.65)]">
+                  <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_16px_rgba(239,68,68,0.5)]">
                     <FaCheck />
                   </span>
                   <p className="font-black">{item}</p>
-                </motion.div>
+                </div>
               )
             )}
           </div>
         </section>
 
-        <section id="contact" className="px-4 py-14 pb-20">
+        <section id="contact" className="px-4 py-10 pb-20">
           <motion.form
             onSubmit={handleSubmit}
-            initial={{ opacity: 0, y: 26 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.55 }}
-            className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl"
+            transition={{ duration: 0.35 }}
+            className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6"
           >
             <p className="text-red-500 tracking-[0.25em] font-black text-xs">
               CONTACT
@@ -482,7 +399,7 @@ function MobileUI() {
                   onChange={handleChange}
                   required={name === "name" || name === "email"}
                   placeholder={placeholder}
-                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/30 text-sm"
+                  className="w-full rounded-2xl bg-white text-black px-5 py-4 outline-none focus:ring-4 focus:ring-red-600/25 text-sm"
                 />
               ))}
 
@@ -493,47 +410,28 @@ function MobileUI() {
                 required
                 placeholder="Tell us what website you want..."
                 rows="5"
-                className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/25 text-sm"
+                className="w-full rounded-2xl bg-black/70 border border-white/10 text-white px-5 py-4 outline-none resize-none focus:border-red-500 focus:ring-4 focus:ring-red-600/20 text-sm"
               />
 
-              <motion.button
-                whileTap={{ scale: 0.96 }}
+              <button
                 type="submit"
                 disabled={sending}
-                className="w-full rounded-full bg-red-600 py-4 font-black shadow-[0_0_28px_rgba(239,68,68,0.5)] disabled:opacity-60 flex items-center justify-center gap-3"
+                className="w-full rounded-full bg-red-600 py-4 font-black shadow-[0_0_24px_rgba(239,68,68,0.4)] disabled:opacity-60 flex items-center justify-center gap-3"
               >
-                {sending ? (
-                  <>
-                    <motion.span
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      ⚔️
-                    </motion.span>
-                    Sending...
-                  </>
-                ) : sent ? (
-                  <>
-                    Sent Successfully <FaStar />
-                  </>
-                ) : (
-                  <>
-                    Send Message <FaPaperPlane />
-                  </>
-                )}
-              </motion.button>
+                {sending
+                  ? "Sending..."
+                  : sent
+                  ? "Sent Successfully 🔥"
+                  : "Send Message"}
+              </button>
 
               <AnimatePresence>
                 {sent && (
                   <motion.div
-                    initial={{ opacity: 0, y: 18 }}
+                    initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -18 }}
-                    className="rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-300 font-bold text-sm"
+                    exit={{ opacity: 0, y: -14 }}
+                    className="rounded-2xl border border-green-500/25 bg-green-500/10 px-5 py-4 text-green-300 font-bold text-sm"
                   >
                     Message delivered to Samurai Websites 🔥
                   </motion.div>
@@ -551,11 +449,12 @@ function MobileUI() {
   );
 }
 
-/* ================= DESKTOP UI ================= */
+/* ================= DESKTOP UI: CINEMATIC VERSION ================= */
 
 function DesktopUI() {
   const [loaded, setLoaded] = useState(false);
-  const { formData, sending, sent, handleChange, handleSubmit } = useContactForm();
+  const { formData, sending, sent, handleChange, handleSubmit } =
+    useContactForm();
 
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -260]);
@@ -911,13 +810,21 @@ function DesktopUI() {
 
               <motion.div
                 animate={{ y: [0, -14, 0] }}
-                transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 4.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="relative w-full max-w-[620px] h-[560px] rounded-[2.8rem] border border-red-500/35 bg-white/[0.06] backdrop-blur-xl shadow-[0_0_95px_rgba(239,68,68,0.32)] overflow-hidden flex items-center justify-center"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20 pointer-events-none"
                   animate={{ x: ["-140%", "140%"] }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2 }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                  }}
                 />
 
                 <motion.div
@@ -935,13 +842,21 @@ function DesktopUI() {
                 <motion.div
                   className="absolute w-[390px] h-[390px] rounded-full border border-red-500/30"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                  transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
                 />
 
                 <motion.div
                   className="absolute w-[490px] h-[490px] rounded-full border border-white/10"
                   animate={{ rotate: -360 }}
-                  transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+                  transition={{
+                    duration: 28,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
                 />
 
                 {orbitDots.map((dot) => (
@@ -1035,7 +950,9 @@ function SharedSections({
     ? "px-6 py-24"
     : "px-4 sm:px-6 py-16 sm:py-24";
 
-  const cardRadius = desktop ? "rounded-[2.5rem]" : "rounded-[2rem] sm:rounded-[2.5rem]";
+  const cardRadius = desktop
+    ? "rounded-[2.5rem]"
+    : "rounded-[2rem] sm:rounded-[2.5rem]";
 
   return (
     <>
@@ -1088,7 +1005,9 @@ function SharedSections({
                   {card.icon}
                 </div>
                 <h3 className="text-xl font-black">{card.title}</h3>
-                <p className="text-gray-500 mt-3 leading-relaxed">{card.text}</p>
+                <p className="text-gray-500 mt-3 leading-relaxed">
+                  {card.text}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -1231,22 +1150,27 @@ function SharedSections({
 
       <section className={sectionClass}>
         <div className="max-w-7xl mx-auto">
-          <div className={`${cardRadius} border border-red-500/25 bg-red-950/20 p-6 sm:p-8 md:p-14 backdrop-blur-xl relative overflow-hidden`}>
+          <div
+            className={`${cardRadius} border border-red-500/25 bg-red-950/20 p-6 sm:p-8 md:p-14 backdrop-blur-xl relative overflow-hidden`}
+          >
             <div className="relative grid sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              {["Looks premium", "Loads clean", "Mobile responsive", "Gets real leads"].map(
-                (item) => (
-                  <motion.div
-                    key={item}
-                    whileHover={{ scale: 1.035, y: -5 }}
-                    className="rounded-3xl bg-black/35 border border-white/10 p-6 flex items-center gap-4"
-                  >
-                    <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_22px_rgba(239,68,68,0.75)] shrink-0">
-                      <FaCheck />
-                    </span>
-                    <p className="font-black">{item}</p>
-                  </motion.div>
-                )
-              )}
+              {[
+                "Looks premium",
+                "Loads clean",
+                "Mobile responsive",
+                "Gets real leads",
+              ].map((item) => (
+                <motion.div
+                  key={item}
+                  whileHover={{ scale: 1.035, y: -5 }}
+                  className="rounded-3xl bg-black/35 border border-white/10 p-6 flex items-center gap-4"
+                >
+                  <span className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_22px_rgba(239,68,68,0.75)] shrink-0">
+                    <FaCheck />
+                  </span>
+                  <p className="font-black">{item}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
@@ -1371,7 +1295,10 @@ function SharedSections({
                   "Lead form connected to email backend",
                   "Modern responsive layout",
                 ].map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-gray-300">
+                  <div
+                    key={item}
+                    className="flex items-center gap-3 text-gray-300"
+                  >
                     <span className="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_14px_rgba(239,68,68,1)] shrink-0" />
                     {item}
                   </div>
